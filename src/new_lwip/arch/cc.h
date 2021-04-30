@@ -39,7 +39,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "lwip/arch/sys_arch.h"
+#include "new_lwip/arch/sys_arch.h"
 
 #define BYTE_ORDER LITTLE_ENDIAN
 

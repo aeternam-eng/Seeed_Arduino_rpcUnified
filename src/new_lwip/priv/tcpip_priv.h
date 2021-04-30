@@ -37,13 +37,13 @@
 #ifndef LWIP_HDR_TCPIP_PRIV_H
 #define LWIP_HDR_TCPIP_PRIV_H
 
-#include "lwip/opt.h"
+#include "new_lwip/opt.h"
 
 #if !NO_SYS /* don't build if not configured for use in lwipopts.h */
 
-#include "lwip/tcpip.h"
-// #include "lwip/sys.h"
-// #include "lwip/timeouts.h"
+#include "new_lwip/tcpip.h"
+// #include "new_lwip/sys.h"
+// #include "new_lwip/timeouts.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -106,7 +106,7 @@ struct tcpip_api_call_data
 #endif /* !LWIP_TCPIP_CORE_LOCKING */
 };
 typedef err_t (*tcpip_api_call_fn)(struct tcpip_api_call_data* call);
-err_t tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call);
+err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call);
 
 // enum tcpip_msg_type {
 //   TCPIP_MSG_API,

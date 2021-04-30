@@ -124,7 +124,7 @@ int log_printf(const char* fmt, ...);
 #define isr_log_n(format, ...)
 #endif
 
-#include "esp_log.h"
+/*#include "esp/esp_log.h"
 
 #ifdef CONFIG_ARDUHAL_ESP_LOG
 #undef ESP_LOGE
@@ -154,7 +154,7 @@ extern int dump_tasks(void);
 
 extern void rpc_printf(const char *format, ...);
 
-#define log_printf rpc_printf
+#define log_printf rpc_printf*/
 
 #ifdef __cplusplus
 }

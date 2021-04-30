@@ -7,6 +7,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include "Arduino.h"
 #include "erpc_framed_transport.h"
 #include "erpc_message_buffer.h"
 #include <cassert>
@@ -56,6 +57,7 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
         // received size can't be larger then buffer length.
         if (h.m_messageSize > message->getLength())
         {
+            log_e("Receive Failed -> msgsize: %d, buflen: %d", h.m_messageSize, message->getLength());
             return kErpcStatus_ReceiveFailed;
         }
 

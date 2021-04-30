@@ -109,7 +109,7 @@ void esp_log_write(esp_log_level_t level, const char* tag, const char* format, .
 
 /** @cond */
 
-//#include "esp_log_internal.h"
+//#include "esp/esp_log_internal.h"
 
 #ifndef LOG_LOCAL_LEVEL
 #ifndef BOOTLOADER_BUILD

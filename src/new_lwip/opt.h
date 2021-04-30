@@ -48,8 +48,8 @@
     Include user defined options first. Anything not defined in these files
     will be set to standard values. Override anything you don't like!
 */
-#include "lwipopts.h"
-#include "lwip/debug.h"
+#include "new_lwip/lwipopts.h"
+#include "new_lwip/debug.h"
 
 /**
     @defgroup lwip_opts Options (lwipopts.h)
@@ -1279,12 +1279,12 @@
 #endif
 
 /**
-    TCP_OVERSIZE: The maximum number of bytes that tcp_write may
+    TCP_OVERSIZE: The maximum number of bytes that new_tcp_write may
     allocate ahead of time in an attempt to create shorter pbuf chains
     for transmission. The meaningful range is 0 to TCP_MSS. Some
     suggested values are:
 
-    0:         Disable oversized allocation. Each tcp_write() allocates a new
+    0:         Disable oversized allocation. Each new_tcp_write() allocates a new
               pbuf (old behaviour).
     1:         Allocate size-aligned pbufs with minimal excess. Use this if your
               scatter-gather DMA requires aligned fragments.
@@ -2445,7 +2445,7 @@
     allow for TCP spoofing attacks. This hook provides the means to implement
     the standardized ISN generation algorithm from RFC 6528 (see contrib/adons/tcp_isn),
     or any other desired algorithm as a replacement.
-    Called from tcp_connect() and tcp_listen_input() when an ISN is needed for
+    Called from new_tcp_connect() and tcp_listen_input() when an ISN is needed for
     a new TCP connection, if TCP support (@ref LWIP_TCP) is enabled.\n
     Signature: u32_t my_hook_tcp_isn(const ip_addr_t* local_ip, u16_t local_port, const ip_addr_t* remote_ip, u16_t remote_port);
     - it may be necessary to use "struct ip_addr" (ip4_addr, ip6_addr) instead of "ip_addr_t" in function declarations\n

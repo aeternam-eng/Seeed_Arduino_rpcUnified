@@ -5,8 +5,8 @@
 #include "erpc/erpc_port.h"
 #include "esp/esp_lib_unified.h"
 #include "rpc_unified_log.h"
-#include "lwip/dns.h"
-#include "lwip/tcp.h"
+#include "new_lwip/dns.h"
+#include "new_lwip/tcp.h"
 
 extern void copy_rtp_to_tp(struct rpc_tcp_pcb *rpc_pcb,struct tcp_pcb *pcb);
 

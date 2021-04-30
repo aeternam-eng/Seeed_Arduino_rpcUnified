@@ -19,9 +19,9 @@
 #if ERPC_THREADS_IS(PTHREADS)
 #include <pthread.h>
 #elif ERPC_THREADS_IS(FREERTOS)
-#include "FreeRTOS.h"
-#include "semphr.h"
-#include "task.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+#include "freertos/task.h"
 #elif ERPC_THREADS_IS(ZEPHYR)
 #include "kernel.h"
 #elif ERPC_THREADS_IS(MBED)
@@ -258,6 +258,8 @@ private:
 #endif
 
 private:
+    static portMUX_TYPE _muxthing;
+
     /*!
      * @brief Copy constructor.
      *

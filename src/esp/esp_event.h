@@ -16,20 +16,20 @@
 #define ESP_EVENT_H_
 
 #include "esp_err.h"
-#include "Seeed_Arduino_FreeRTOS.h"
+#include "freertos/FreeRTOS.h"
 #include <stdint.h>
 #include <stdbool.h>
 
 #include "esp_err.h"
-#include "esp_wifi_types.h"
-#include "tcpip_adapter.h"
+#include "esp/esp_wifi_types.h"
+#include "esp/tcpip_adapter.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // esp_event_legacy
-typedef enum {
+typedef enum : uint8_t {
     SYSTEM_EVENT_WIFI_READY = 0,           /**< ESP32 WiFi ready */
     SYSTEM_EVENT_SCAN_DONE,                /**< ESP32 finish scanning AP */
     SYSTEM_EVENT_STA_START,                /**< ESP32 station start */
@@ -96,7 +96,7 @@ typedef struct {
 } system_event_sta_authmode_change_t;
 
 typedef struct {
-    tcpip_adapter_ip_info_t ip_info;
+    rpc_tcpip_adapter_ip_info_t ip_info;
     bool ip_changed;
 } system_event_sta_got_ip_t;
 
@@ -105,8 +105,8 @@ typedef struct {
 } system_event_sta_wps_er_pin_t;
 
 typedef struct {
-    tcpip_adapter_if_t if_index;
-    tcpip_adapter_ip6_info_t ip6_info;
+    rpc_tcpip_adapter_if_t if_index;
+    rpc_tcpip_adapter_ip6_info_t ip6_info;
 } system_event_got_ip6_t;
 
 typedef struct {

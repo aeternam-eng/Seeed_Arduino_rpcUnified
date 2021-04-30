@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "esp_err.h"
+#include "esp/esp_err.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -107,13 +107,13 @@ typedef enum {
     WIFI_REASON_CONNECTION_FAIL          = 205,
 } wifi_err_reason_t;
 
-typedef enum {
+typedef enum  {
     WIFI_SECOND_CHAN_NONE = 0,  /**< the channel width is HT20 */
     WIFI_SECOND_CHAN_ABOVE,     /**< the channel width is HT40 and the secondary channel is above the primary channel */
     WIFI_SECOND_CHAN_BELOW,     /**< the channel width is HT40 and the secondary channel is below the primary channel */
 } wifi_second_chan_t;
 
-typedef enum {
+typedef enum  {
     WIFI_SCAN_TYPE_ACTIVE = 0,  /**< active scan */
     WIFI_SCAN_TYPE_PASSIVE,     /**< passive scan */
 } wifi_scan_type_t;
@@ -142,7 +142,7 @@ typedef struct {
     wifi_scan_time_t scan_time;  /**< scan time per channel */
 } wifi_scan_config_t;
 
-typedef enum {
+typedef enum  {
     WIFI_CIPHER_TYPE_NONE = 0,   /**< the cipher type is none */
     WIFI_CIPHER_TYPE_WEP40,      /**< the cipher type is WEP40 */
     WIFI_CIPHER_TYPE_WEP104,     /**< the cipher type is WEP104 */
@@ -156,7 +156,7 @@ typedef enum {
     @brief WiFi antenna
 
 */
-typedef enum {
+typedef enum  {
     WIFI_ANT_ANT0,          /**< WiFi antenna 0 */
     WIFI_ANT_ANT1,          /**< WiFi antenna 1 */
     WIFI_ANT_MAX,           /**< Invalid WiFi antenna */
@@ -182,12 +182,12 @@ typedef struct {
     wifi_country_t country;               /**< country information of AP */
 } wifi_ap_record_t;
 
-typedef enum {
+typedef enum  {
     WIFI_FAST_SCAN = 0,                   /**< Do fast scan, scan will end after find SSID match AP */
     WIFI_ALL_CHANNEL_SCAN,                /**< All channel scan, scan will end after scan all the channel */
 } wifi_scan_method_t;
 
-typedef enum {
+typedef enum  {
     WIFI_CONNECT_AP_BY_SIGNAL = 0,        /**< Sort match AP in scan list by RSSI */
     WIFI_CONNECT_AP_BY_SECURITY,          /**< Sort match AP in scan list by security mode */
 } wifi_sort_method_t;
@@ -201,7 +201,7 @@ typedef struct {
 typedef wifi_fast_scan_threshold_t
 wifi_scan_threshold_t;    /**< wifi_fast_scan_threshold_t only used in fast scan mode once, now it enabled in all channel scan, the wifi_fast_scan_threshold_t will be remove in version 4.0 */
 
-typedef enum {
+typedef enum  {
     WIFI_PS_NONE,        /**< No power save */
     WIFI_PS_MIN_MODEM,   /**< Minimum modem power saving. In this mode, station wakes up to receive beacon every DTIM period */
     WIFI_PS_MAX_MODEM,   /**< Maximum modem power saving. In this mode, interval to receive beacons is determined by the listen_interval parameter in wifi_sta_config_t */
@@ -214,7 +214,7 @@ typedef enum {
 #define WIFI_PROTOCOL_11N         4
 #define WIFI_PROTOCOL_LR          8
 
-typedef enum {
+typedef enum  {
     WIFI_BW_HT20 = 1, /* Bandwidth is HT20 */
     WIFI_BW_HT40,     /* Bandwidth is HT40 */
 } wifi_bandwidth_t;
@@ -275,7 +275,7 @@ typedef struct {
     int       num; /**< number of stations in the list (other entries are invalid) */
 } wifi_sta_list_t;
 
-typedef enum {
+typedef enum  {
     WIFI_STORAGE_FLASH,  /**< all configuration will strore in both memory and flash */
     WIFI_STORAGE_RAM,    /**< all configuration will only store in the memory */
 } wifi_storage_t;
@@ -285,7 +285,7 @@ typedef enum {
 
     Determines the frame type that the IE will be associated with.
 */
-typedef enum {
+typedef enum  {
     WIFI_VND_IE_TYPE_BEACON,
     WIFI_VND_IE_TYPE_PROBE_REQ,
     WIFI_VND_IE_TYPE_PROBE_RESP,
@@ -298,7 +298,7 @@ typedef enum {
 
     Each IE type can have up to two associated vendor ID elements.
 */
-typedef enum {
+typedef enum  {
     WIFI_VND_IE_ID_0,
     WIFI_VND_IE_ID_1,
 } wifi_vendor_ie_id_t;
@@ -365,7 +365,7 @@ typedef struct {
     Passed to promiscuous mode RX callback to indicate the type of parameter in the buffer.
 
 */
-typedef enum {
+typedef enum  {
     WIFI_PKT_MGMT,  /**< Management frame, indicates 'buf' argument is wifi_promiscuous_pkt_t */
     WIFI_PKT_CTRL,  /**< Control frame, indicates 'buf' argument is wifi_promiscuous_pkt_t */
     WIFI_PKT_DATA,  /**< Data frame, indiciates 'buf' argument is wifi_promiscuous_pkt_t */
@@ -448,7 +448,7 @@ typedef struct {
     @brief WiFi antenna mode
 
 */
-typedef enum {
+typedef enum  {
     WIFI_ANT_MODE_ANT0,          /**< Enable WiFi antenna 0 only */
     WIFI_ANT_MODE_ANT1,          /**< Enable WiFi antenna 1 only */
     WIFI_ANT_MODE_AUTO,          /**< Enable WiFi antenna 0 and 1, automatically select an antenna */
@@ -473,7 +473,7 @@ typedef struct {
     @brief WiFi PHY rate encodings
 
 */
-typedef enum {
+typedef enum  {
     WIFI_PHY_RATE_1M_L      = 0x00, /**< 1 Mbps with long preamble */
     WIFI_PHY_RATE_2M_L      = 0x01, /**< 2 Mbps with long preamble */
     WIFI_PHY_RATE_5M_L      = 0x02, /**< 5.5 Mbps with long preamble */
@@ -514,7 +514,7 @@ typedef enum {
     @brief WiFi ioctl command type
 
 */
-typedef enum {
+typedef enum  {
     WIFI_IOCTL_SET_STA_HT2040_COEX = 1, /**< Set the configuration of STA's HT2040 coexist management */
     WIFI_IOCTL_GET_STA_HT2040_COEX,     /**< Get the configuration of STA's HT2040 coexist management */
     WIFI_IOCTL_MAX,

@@ -1,11 +1,10 @@
 /**
  * @file
- *
- * IPv6 version of ICMP, as per RFC 4443.
+ * IP protocol definitions
  */
 
 /*
- * Copyright (c) 2010 Inico Technologies Ltd.
+ * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -32,39 +31,21 @@
  *
  * This file is part of the lwIP TCP/IP stack.
  *
- * Author: Ivan Delamer <delamer@inicotech.com>
+ * Author: Adam Dunkels <adam@sics.se>
  *
- *
- * Please coordinate changes and requests with Ivan Delamer
- * <delamer@inicotech.com>
  */
-#ifndef LWIP_HDR_ICMP6_H
-#define LWIP_HDR_ICMP6_H
+#ifndef LWIP_HDR_PROT_IP_H
+#define LWIP_HDR_PROT_IP_H
 
-#include "lwip/opt.h"
-#include "lwip/pbuf.h"
-#include "lwip/ip6_addr.h"
-//#include "lwip/netif.h"
-#include "lwip/prot/icmp6.h"
+#include "new_lwip/arch.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define IP_PROTO_ICMP    1
+#define IP_PROTO_IGMP    2
+#define IP_PROTO_UDP     17
+#define IP_PROTO_UDPLITE 136
+#define IP_PROTO_TCP     6
 
-#if LWIP_ICMP6 && LWIP_IPV6 /* don't build if not configured for use in lwipopts.h */
+/** This operates on a void* by loading the first byte */
+#define IP_HDR_GET_VERSION(ptr)   ((*(u8_t*)(ptr)) >> 4)
 
-//void icmp6_input(struct pbuf *p, struct netif *inp);
-//void icmp6_dest_unreach(struct pbuf *p, enum icmp6_dur_code c);
-//void icmp6_packet_too_big(struct pbuf *p, u32_t mtu);
-//void icmp6_time_exceeded(struct pbuf *p, enum icmp6_te_code c);
-//void icmp6_param_problem(struct pbuf *p, enum icmp6_pp_code c, u32_t pointer);
-
-#endif /* LWIP_ICMP6 && LWIP_IPV6 */
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif /* LWIP_HDR_ICMP6_H */
+#endif /* LWIP_HDR_PROT_IP_H */

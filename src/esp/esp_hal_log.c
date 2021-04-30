@@ -2,11 +2,11 @@
 #include <time.h>
 #include <sys/time.h>
 #include <stdlib.h>
-#include "esp_hal_log.h"
-#include "FreeRTOS.h"
+#include "esp/esp_hal_log.h"
+#include "freertos/FreeRTOS.h"
 
 //used by hal log
-const char * pathToFileName(const char * path)
+/*const char * pathToFileName(const char * path)
 {
     size_t i = 0;
     size_t pos = 0;
@@ -19,7 +19,7 @@ const char * pathToFileName(const char * path)
         p++;
     }
     return path+pos;
-}
+}*/
 
 int dump_tasks(void) {
     static char TaskListBuf[0x180];

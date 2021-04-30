@@ -17,7 +17,7 @@ typedef struct {
 } rpc_mdns_txt_item_t;
 
 typedef struct rpc_mdns_result_basic_s {
-    tcpip_adapter_if_t tcpip_if;
+    rpc_tcpip_adapter_if_t tcpip_if;
     mdns_ip_protocol_t ip_protocol;
     // PTR
     char instance_name[MDNS_NAME_BUF_LEN];

@@ -37,6 +37,8 @@ extern "C" {
 #define SCAN_MAX_NUMBER 10
 #elif SEEED_WIO_TERMINAL
 #define SCAN_MAX_NUMBER 60
+#elif ESP32
+#define SCAN_MAX_NUMBER 60
 #else
 #error "BOARD_TYPE ERROR"
 #endif
@@ -68,7 +70,7 @@ extern "C" {
 /**
   * @brief  The enumeration lists the results of the function.
   */
-enum
+enum 
 {
     RTW_SUCCESS                      = 0,    /**< Success */
     RTW_PENDING                      = 1,    /**< Pending */
@@ -424,7 +426,7 @@ typedef unsigned long rtw_scan_mode_t;
 /**
   * @brief  The enumeration lists the supported autoreconnect mode by WIFI driver.
   */
-typedef enum{
+typedef enum {
     RTW_AUTORECONNECT_DISABLE,
     RTW_AUTORECONNECT_FINITE,
     RTW_AUTORECONNECT_INFINITE

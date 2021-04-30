@@ -18,9 +18,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "esp_err.h"
-#include "esp_event.h"
-#include "Seeed_Arduino_FreeRTOS.h"
+#include "esp/esp_err.h"
+#include "esp/esp_event.h"
+#include "freertos/FreeRTOS.h"
 
 
 #ifdef __cplusplus

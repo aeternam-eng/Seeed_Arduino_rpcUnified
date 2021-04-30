@@ -59,10 +59,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "esp_err.h"
-#include "esp_wifi_types.h"
-#include "esp_event.h"
-#include "esp_hal_log.h"
+#include "esp/esp_err.h"
+#include "esp/esp_wifi_types.h"
+#include "esp/esp_event.h"
+#include "esp/esp_hal_log.h"
 
 #ifdef __cplusplus
 extern "C" {

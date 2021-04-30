@@ -33,10 +33,10 @@
  * @param callback_arg argument to pass to the callback function
  * @return a err_t return code.
  */
-err_t dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_callback found,
+err_t new_dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_callback found,
                         void *callback_arg)
 {
-  return dns_gethostbyname_addrtype(hostname, addr, found, callback_arg, LWIP_DNS_ADDRTYPE_DEFAULT);
+  return new_dns_gethostbyname_addrtype(hostname, addr, found, callback_arg, LWIP_DNS_ADDRTYPE_DEFAULT);
 }
 
 /**
@@ -53,7 +53,7 @@ err_t dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_callbac
  *                     - LWIP_DNS_ADDRTYPE_IPV4: try to resolve IPv4 only
  *                     - LWIP_DNS_ADDRTYPE_IPV6: try to resolve IPv6 only
  */
-err_t dns_gethostbyname_addrtype(const char *hostname, ip_addr_t *addr, dns_found_callback found,
+err_t new_dns_gethostbyname_addrtype(const char *hostname, ip_addr_t *addr, dns_found_callback found,
                                  void *callback_arg, u8_t dns_addrtype)
 {
   FUNC_ENTRY;

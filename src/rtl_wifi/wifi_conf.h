@@ -339,7 +339,7 @@ int wifi_get_ap_info(rtw_bss_info_t * ap_info, rtw_security_t* security);
  * @return  RTW_SUCCESS: If result is successfully set.
  * @return  RTW_ERROR: If result is not successfully set.
  */
-int wifi_set_country(rtw_country_code_t country_code);
+int new_wifi_set_country(rtw_country_code_t country_code);
 
 /**
  * @brief  retrieved sta mode MAX data rate.

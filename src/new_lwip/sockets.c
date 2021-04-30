@@ -19,7 +19,7 @@ int lwip_errno()
     return so_error;
 }
 
-int lwip_accept(int s, struct sockaddr *addr, socklen_t *addrlen)
+int new_lwip_accept(int s, struct sockaddr *addr, socklen_t *addrlen)
 {
     FUNC_ENTRY;
     binary_t b_addr;
@@ -28,7 +28,7 @@ int lwip_accept(int s, struct sockaddr *addr, socklen_t *addrlen)
     int ret = rpc_lwip_accept(s, &b_addr, addrlen);
     FUNC_EXIT_RC(ret);
 }
-int lwip_bind(int s, const struct sockaddr *name, socklen_t namelen)
+int new_lwip_bind(int s, const struct sockaddr *name, socklen_t namelen)
 {
     FUNC_ENTRY;
     binary_t b_name;
@@ -37,11 +37,11 @@ int lwip_bind(int s, const struct sockaddr *name, socklen_t namelen)
     int ret = rpc_lwip_bind(s, &b_name, namelen);
     FUNC_EXIT_RC(ret);
 }
-int lwip_shutdown(int s, int how)
+int new_lwip_shutdown(int s, int how)
 {
-    RPC_FUN_RETURN_2(lwip_shutdown, s, how, int);
+    RPC_FUN_RETURN_2(new_lwip_shutdown, s, how, int);
 }
-int lwip_getpeername(int s, struct sockaddr *name, socklen_t *namelen)
+int new_lwip_getpeername(int s, struct sockaddr *name, socklen_t *namelen)
 {
     FUNC_ENTRY;
     binary_t b_name;
@@ -49,7 +49,7 @@ int lwip_getpeername(int s, struct sockaddr *name, socklen_t *namelen)
     memcpy(name, b_name.data, sizeof(struct sockaddr));
     FUNC_EXIT_RC(ret);
 }
-int lwip_getsockname(int s, struct sockaddr *name, socklen_t *namelen)
+int new_lwip_getsockname(int s, struct sockaddr *name, socklen_t *namelen)
 {
     FUNC_ENTRY;
     binary_t b_name;
@@ -57,7 +57,7 @@ int lwip_getsockname(int s, struct sockaddr *name, socklen_t *namelen)
     memcpy(name, b_name.data, sizeof(struct sockaddr));
     FUNC_EXIT_RC(ret);
 }
-int lwip_getsockopt(int s, int level, int optname, void *optval, socklen_t *optlen)
+int new_lwip_getsockopt(int s, int level, int optname, void *optval, socklen_t *optlen)
 {
     FUNC_ENTRY;
     binary_t b_in_optval, b_out_optval;
@@ -71,7 +71,7 @@ int lwip_getsockopt(int s, int level, int optname, void *optval, socklen_t *optl
     }
     FUNC_EXIT_RC(ret);
 }
-int lwip_setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen)
+int new_lwip_setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen)
 {
     FUNC_ENTRY;
     binary_t b_optval;
@@ -80,11 +80,11 @@ int lwip_setsockopt(int s, int level, int optname, const void *optval, socklen_t
     int ret = rpc_lwip_setsockopt(s, level, optname, &b_optval, optlen);
     FUNC_EXIT_RC(ret);
 }
-int lwip_close(int s)
+int new_lwip_close(int s)
 {
     RPC_FUN_RETURN_1(lwip_close, s, int);
 }
-int lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
+int new_lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
 {
     FUNC_ENTRY;
     binary_t b_name;
@@ -93,7 +93,7 @@ int lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
     int ret = rpc_lwip_connect(s, &b_name, namelen);
     FUNC_EXIT_RC(ret);
 }
-int lwip_listen(int s, int backlog)
+int new_lwip_listen(int s, int backlog)
 {
     RPC_FUN_RETURN_2(lwip_listen, s, backlog, int);
 }
@@ -103,7 +103,7 @@ int lwip_available(int s)
     RPC_FUN_RETURN_1(lwip_available, s, int);
 }
 
-int lwip_recv(int s, void *mem, size_t len, int flags)
+int new_lwip_recv(int s, void *mem, size_t len, int flags)
 {
     FUNC_ENTRY;
     binary_t b_mem;
@@ -118,7 +118,7 @@ int lwip_recv(int s, void *mem, size_t len, int flags)
     }
     FUNC_EXIT_RC(ret);
 }
-int lwip_read(int s, void *mem, size_t len)
+int new_lwip_read(int s, void *mem, size_t len)
 {
     FUNC_ENTRY;
     binary_t b_mem;
@@ -134,7 +134,7 @@ int lwip_read(int s, void *mem, size_t len)
     FUNC_EXIT_RC(ret);
 }
 
-int lwip_recvfrom(int s, void *mem, size_t len, int flags,struct sockaddr *from, socklen_t *fromlen)
+int new_lwip_recvfrom(int s, void *mem, size_t len, int flags,struct sockaddr *from, socklen_t *fromlen)
 {
     FUNC_ENTRY;
     binary_t b_mem;
@@ -160,7 +160,7 @@ int lwip_recvfrom(int s, void *mem, size_t len, int flags,struct sockaddr *from,
 
     FUNC_EXIT_RC(ret);
 }
-int lwip_send(int s, const void *dataptr, size_t size, int flags)
+int new_lwip_send(int s, const void *dataptr, size_t size, int flags)
 {
     FUNC_ENTRY;
     binary_t b_data;
@@ -176,7 +176,7 @@ int lwip_send(int s, const void *dataptr, size_t size, int flags)
     int ret = rpc_lwip_send(s, &b_data, flags);
     FUNC_EXIT_RC(ret);
 }
-int lwip_sendmsg(int s, const struct msghdr *message, int flags)
+int new_lwip_sendmsg(int s, const struct msghdr *message, int flags)
 {
     FUNC_ENTRY;
     binary_t b_msg_name;
@@ -191,7 +191,7 @@ int lwip_sendmsg(int s, const struct msghdr *message, int flags)
     int ret = rpc_lwip_sendmsg(s, &b_msg_name, &b_msg_iov, &b_msg_control, message->msg_flags, flags);
     FUNC_EXIT_RC(ret);
 }
-int lwip_sendto(int s, const void *dataptr, size_t size, int flags,
+int new_lwip_sendto(int s, const void *dataptr, size_t size, int flags,
                 const struct sockaddr *to, socklen_t tolen)
 {
     FUNC_ENTRY;
@@ -204,11 +204,11 @@ int lwip_sendto(int s, const void *dataptr, size_t size, int flags,
     int ret = rpc_lwip_sendto(s, &b_data, flags, &b_to, tolen);
     FUNC_EXIT_RC(ret);
 }
-int lwip_socket(int domain, int type, int protocol)
+int new_lwip_socket(int domain, int type, int protocol)
 {
     RPC_FUN_RETURN_3(lwip_socket, domain, type, protocol, int);
 }
-int lwip_write(int s, const void *dataptr, size_t size)
+int new_lwip_write(int s, const void *dataptr, size_t size)
 {
     FUNC_ENTRY;
     binary_t b_data;
@@ -217,7 +217,7 @@ int lwip_write(int s, const void *dataptr, size_t size)
     int ret = rpc_lwip_write(s, &b_data, size);
     FUNC_EXIT_RC(ret);
 }
-int lwip_writev(int s, const struct iovec *iov, int iovcnt)
+int new_lwip_writev(int s, const struct iovec *iov, int iovcnt)
 {
     FUNC_ENTRY;
     binary_t b_iov;
@@ -226,7 +226,7 @@ int lwip_writev(int s, const struct iovec *iov, int iovcnt)
     int ret = rpc_lwip_writev(s, &b_iov, iovcnt);
     FUNC_EXIT_RC(ret);
 }
-int lwip_select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset,
+int new_lwip_select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset,
                 struct timeval *timeout)
 {
     FUNC_ENTRY;
@@ -277,7 +277,7 @@ int lwip_select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptse
     }
     FUNC_EXIT_RC(ret);
 }
-int lwip_ioctl(int s, long cmd, void *argp)
+int new_lwip_ioctl(int s, long cmd, void *argp)
 {
     FUNC_ENTRY;
     binary_t b_in_argp;
@@ -293,7 +293,7 @@ int lwip_ioctl(int s, long cmd, void *argp)
     }
     FUNC_EXIT_RC(ret);
 }
-int lwip_fcntl(int s, int cmd, int val)
+int new_lwip_fcntl(int s, int cmd, int val)
 {
     RPC_FUN_RETURN_3(lwip_fcntl, s, cmd, val, int);
 }

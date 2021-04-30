@@ -12,7 +12,7 @@
 #include "Arduino.h"
 
 extern "C" {
-#include "FreeRTOS.h"
+#include "freertos/FreeRTOS.h"
 };
 
 // using namespace std;

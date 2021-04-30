@@ -11,11 +11,12 @@ extern "C"
 #ifndef TAG
 #define TAG "RPC"
 #endif
-//  #define ENABLE_RPC_DEBUG
-// #define ENABLE_RPC_WARN
-// #define ENABLE_RPC_INFO
-// #define ENABLE_RPC_ERROR
-// #define ENABLE_RPC_TRACE
+
+#define ENABLE_RPC_DEBUG
+#define ENABLE_RPC_WARN
+#define ENABLE_RPC_INFO
+#define ENABLE_RPC_ERROR
+#define ENABLE_RPC_TRACE
 
 	extern void rpc_printf(const char *format, ...);
 /**

@@ -38,8 +38,8 @@
 #ifndef LWIP_HDR_PBUF_H
 #define LWIP_HDR_PBUF_H
 
-#include "lwip/opt.h"
-#include "lwip/err.h"
+#include "new_lwip/opt.h"
+#include "new_lwip/err.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,7 +47,7 @@ extern "C" {
 
 /** LWIP_SUPPORT_CUSTOM_PBUF==1: Custom pbufs behave much like their pbuf type
  * but they are allocated by external code (initialised by calling
- * pbuf_alloced_custom()) and when pbuf_free gives up their last reference, they
+ * pbuf_alloced_custom()) and when new_pbuf_free gives up their last reference, they
  * are freed by calling pbuf_custom->custom_free_function().
  * Currently, the pbuf_custom code is only needed for one specific configuration
  * of IP_FRAG, unless required by external driver/application code. */
@@ -126,7 +126,7 @@ typedef enum {
 
 /** indicates this packet's data should be immediately passed to the application */
 #define PBUF_FLAG_PUSH      0x01U
-/** indicates this is a custom pbuf: pbuf_free calls pbuf_custom->custom_free_function()
+/** indicates this is a custom pbuf: new_pbuf_free calls pbuf_custom->custom_free_function()
     when the last reference is released (plus custom PBUF_RAM cannot be trimmed) */
 #define PBUF_FLAG_IS_CUSTOM 0x02U
 /** indicates this pbuf is UDP multicast to be looped back */
@@ -196,7 +196,7 @@ typedef void (*pbuf_free_custom_fn)(struct pbuf *p);
 struct pbuf_custom {
   /** The actual pbuf */
   struct pbuf pbuf;
-  /** This function is called when pbuf_free deallocates this pbuf(_custom) */
+  /** This function is called when new_pbuf_free deallocates this pbuf(_custom) */
   pbuf_free_custom_fn custom_free_function;
 };
 #endif /* LWIP_SUPPORT_CUSTOM_PBUF */
@@ -233,7 +233,7 @@ void pbuf_realloc(struct pbuf *p, u16_t size);
 u8_t pbuf_header(struct pbuf *p, s16_t header_size);
 u8_t pbuf_header_force(struct pbuf *p, s16_t header_size);
 void pbuf_ref(struct pbuf *p);
-u8_t pbuf_free(struct pbuf *p);
+u8_t new_pbuf_free(struct pbuf *p);
 u16_t pbuf_clen(const struct pbuf *p);
 void pbuf_cat(struct pbuf *head, struct pbuf *tail);
 void pbuf_chain(struct pbuf *head, struct pbuf *tail);

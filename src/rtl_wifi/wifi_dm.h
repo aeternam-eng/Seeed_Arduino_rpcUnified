@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-enum{
+enum {
 	RATE_BITMAP_CCK_1M = 0,
 	RATE_BITMAP_CCK_2M,
 	RATE_BITMAP_CCK_5_5M,

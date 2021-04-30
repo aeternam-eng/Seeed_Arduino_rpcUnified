@@ -110,9 +110,9 @@ ip_addr_t       dns_getserver(u8_t numdns);
 #else
 const ip_addr_t* dns_getserver(u8_t numdns);
 #endif
-err_t            dns_gethostbyname(const char* hostname, ip_addr_t* addr,
+err_t            new_dns_gethostbyname(const char* hostname, ip_addr_t* addr,
                                    dns_found_callback found, void* callback_arg);
-err_t            dns_gethostbyname_addrtype(const char* hostname, ip_addr_t* addr,
+err_t            new_dns_gethostbyname_addrtype(const char* hostname, ip_addr_t* addr,
         dns_found_callback found, void* callback_arg,
         u8_t dns_addrtype);
 #if ESP_DNS

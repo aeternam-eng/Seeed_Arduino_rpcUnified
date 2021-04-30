@@ -1,10 +1,11 @@
 /**
  * @file
- * Heap API
+ *
+ * IPv6 version of ICMP, as per RFC 4443.
  */
 
 /*
- * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
+ * Copyright (c) 2010 Inico Technologies Ltd.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,48 +32,39 @@
  *
  * This file is part of the lwIP TCP/IP stack.
  *
- * Author: Adam Dunkels <adam@sics.se>
+ * Author: Ivan Delamer <delamer@inicotech.com>
  *
+ *
+ * Please coordinate changes and requests with Ivan Delamer
+ * <delamer@inicotech.com>
  */
-#ifndef LWIP_HDR_MEM_H
-#define LWIP_HDR_MEM_H
+#ifndef LWIP_HDR_ICMP6_H
+#define LWIP_HDR_ICMP6_H
 
-#include "lwip/opt.h"
+#include "new_lwip/opt.h"
+#include "new_lwip/pbuf.h"
+#include "new_lwip/ip6_addr.h"
+//#include "new_lwip/netif.h"
+#include "new_lwip/prot/icmp6.h"
 
-
-
-#if MEM_LIBC_MALLOC
-
-#include "lwip/arch.h"
-
-typedef size_t mem_size_t;
-#define MEM_SIZE_F SZT_F
-
-#elif MEM_USE_POOLS
-
-typedef u16_t mem_size_t;
-#define MEM_SIZE_F U16_F
-
-#else
-
-/* MEM_SIZE would have to be aligned, but using 64000 here instead of
- * 65535 leaves some room for alignment...
- */
-#if MEM_SIZE > 64000L
-typedef u32_t mem_size_t;
-#define MEM_SIZE_F U32_F
-#else
-typedef u16_t mem_size_t;
-#define MEM_SIZE_F U16_F
-#endif /* MEM_SIZE > 64000 */
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-//void  mem_init(void);
-//void *mem_trim(void *mem, mem_size_t size);
-void *mem_malloc(mem_size_t size);
-//void *mem_calloc(mem_size_t count, mem_size_t size);
-void  mem_free(void *mem);
+#if LWIP_ICMP6 && LWIP_IPV6 /* don't build if not configured for use in lwipopts.h */
+
+//void icmp6_input(struct pbuf *p, struct netif *inp);
+//void icmp6_dest_unreach(struct pbuf *p, enum icmp6_dur_code c);
+//void icmp6_packet_too_big(struct pbuf *p, u32_t mtu);
+//void icmp6_time_exceeded(struct pbuf *p, enum icmp6_te_code c);
+//void icmp6_param_problem(struct pbuf *p, enum icmp6_pp_code c, u32_t pointer);
+
+#endif /* LWIP_ICMP6 && LWIP_IPV6 */
 
 
+#ifdef __cplusplus
+}
+#endif
 
-#endif /* LWIP_HDR_MEM_H */
+
+#endif /* LWIP_HDR_ICMP6_H */

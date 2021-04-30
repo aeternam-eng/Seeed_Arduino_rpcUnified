@@ -38,17 +38,17 @@
 #ifndef LWIP_HDR_TCP_H
 #define LWIP_HDR_TCP_H
 
-#include "lwip/opt.h"
+#include "new_lwip/opt.h"
 
 #if LWIP_TCP /* don't build if not configured for use in lwipopts.h */
 
-#include "lwip/mem.h"
-// #include "lwip/pbuf.h"
-#include "lwip/ip.h"
-// #include "lwip/icmp.h"
-// #include "lwip/err.h"
-// #include "lwip/ip6.h"
-// #include "lwip/ip6_addr.h"
+#include "new_lwip/mem.h"
+// #include "new_lwip/pbuf.h"
+#include "new_lwip/ip.h"
+// #include "new_lwip/icmp.h"
+// #include "new_lwip/err.h"
+// #include "new_lwip/ip6.h"
+// #include "new_lwip/ip6_addr.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,10 +61,10 @@ struct tcp_pcb;
 /** Function prototype for tcp accept callback functions. Called when a new
  * connection can be accepted on a listening pcb.
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param newpcb The new connection pcb
  * @param err An error code if there has been an error accepting.
- *            Only return ERR_ABRT if you have called tcp_abort from within the
+ *            Only return ERR_ABRT if you have called new_tcp_abort from within the
  *            callback function!
  */
 typedef err_t (*tcp_accept_fn)(void *arg, struct tcp_pcb *newpcb, err_t err);
@@ -72,11 +72,11 @@ typedef err_t (*tcp_accept_fn)(void *arg, struct tcp_pcb *newpcb, err_t err);
 /** Function prototype for tcp receive callback functions. Called when data has
  * been received.
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param tpcb The connection pcb which received data
  * @param p The received data (or NULL when the connection has been closed!)
  * @param err An error code if there has been an error receiving
- *            Only return ERR_ABRT if you have called tcp_abort from within the
+ *            Only return ERR_ABRT if you have called new_tcp_abort from within the
  *            callback function!
  */
 typedef err_t (*tcp_recv_fn)(void *arg, struct tcp_pcb *tpcb,
@@ -86,23 +86,23 @@ typedef err_t (*tcp_recv_fn)(void *arg, struct tcp_pcb *tpcb,
  * been acknowledged by the remote side. Use it to free corresponding resources.
  * This also means that the pcb has now space available to send new data.
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param tpcb The connection pcb for which data has been acknowledged
  * @param len The amount of bytes acknowledged
- * @return ERR_OK: try to send some data by calling tcp_output
- *            Only return ERR_ABRT if you have called tcp_abort from within the
+ * @return ERR_OK: try to send some data by calling new_tcp_output
+ *            Only return ERR_ABRT if you have called new_tcp_abort from within the
  *            callback function!
  */
 typedef err_t (*tcp_sent_fn)(void *arg, struct tcp_pcb *tpcb,
                               u16_t len);
 
 /** Function prototype for tcp poll callback functions. Called periodically as
- * specified by @see tcp_poll.
+ * specified by @see new_tcp_poll.
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param tpcb tcp pcb
- * @return ERR_OK: try to send some data by calling tcp_output
- *            Only return ERR_ABRT if you have called tcp_abort from within the
+ * @return ERR_OK: try to send some data by calling new_tcp_output
+ *            Only return ERR_ABRT if you have called new_tcp_abort from within the
  *            callback function!
  */
 typedef err_t (*tcp_poll_fn)(void *arg, struct tcp_pcb *tpcb);
@@ -112,21 +112,21 @@ typedef err_t (*tcp_poll_fn)(void *arg, struct tcp_pcb *tpcb);
  *
  * @note The corresponding pcb is already freed when this callback is called!
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param err Error code to indicate why the pcb has been closed
- *            ERR_ABRT: aborted through tcp_abort or by a TCP timer
+ *            ERR_ABRT: aborted through new_tcp_abort or by a TCP timer
  *            ERR_RST: the connection was reset by the remote host
  */
 typedef void  (*tcp_err_fn)(void *arg, err_t err);
 
 /** Function prototype for tcp connected callback functions. Called when a pcb
  * is connected to the remote side after initiating a connection attempt by
- * calling tcp_connect().
+ * calling new_tcp_connect().
  *
- * @param arg Additional argument to pass to the callback function (@see tcp_arg())
+ * @param arg Additional argument to pass to the callback function (@see new_tcp_arg())
  * @param tpcb The connection pcb which is connected
  * @param err An unused error code, always ERR_OK currently ;-) @todo!
- *            Only return ERR_ABRT if you have called tcp_abort from within the
+ *            Only return ERR_ABRT if you have called new_tcp_abort from within the
  *            callback function!
  *
  * @note When a connection attempt fails, the error callback is currently called!
@@ -368,16 +368,16 @@ struct tcp_pcb {
 
 /* Application program's interface: */
 struct tcp_pcb * tcp_new     (void);
-struct tcp_pcb * tcp_new_ip_type (u8_t type);
+struct tcp_pcb * new_tcp_new_ip_type (u8_t type);
 
-void             tcp_arg     (struct tcp_pcb *pcb, void *arg);
+void             new_tcp_arg     (struct tcp_pcb *pcb, void *arg);
 #if LWIP_CALLBACK_API
-void             tcp_recv    (struct tcp_pcb *pcb, tcp_recv_fn recv);
-void             tcp_sent    (struct tcp_pcb *pcb, tcp_sent_fn sent);
-void             tcp_err     (struct tcp_pcb *pcb, tcp_err_fn err);
-void             tcp_accept  (struct tcp_pcb *pcb, tcp_accept_fn accept);
+void             new_tcp_recv    (struct tcp_pcb *pcb, tcp_recv_fn recv);
+void             new_tcp_sent    (struct tcp_pcb *pcb, tcp_sent_fn sent);
+void             new_tcp_err     (struct tcp_pcb *pcb, tcp_err_fn err);
+void             new_tcp_accept  (struct tcp_pcb *pcb, tcp_accept_fn accept);
 #endif /* LWIP_CALLBACK_API */
-void             tcp_poll    (struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interval);
+void             new_tcp_poll    (struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interval);
 
 #if LWIP_TCP_TIMESTAMPS
 #define          tcp_mss(pcb)             (((pcb)->flags & TF_TIMESTAMP) ? ((pcb)->mss - 12)  : (pcb)->mss)
@@ -407,26 +407,26 @@ void             tcp_poll    (struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interv
 // #endif /* TCP_LISTEN_BACKLOG */
 // #define          tcp_accepted(pcb) /* compatibility define, not needed any more */
 
-void             tcp_recved  (struct tcp_pcb *pcb, u16_t len);
-err_t            tcp_bind    (struct tcp_pcb *pcb, const ip_addr_t *ipaddr,
+void             new_tcp_recved  (struct tcp_pcb *pcb, u16_t len);
+err_t            new_tcp_bind    (struct tcp_pcb *pcb, const ip_addr_t *ipaddr,
                               u16_t port);
-err_t            tcp_connect (struct tcp_pcb *pcb, const ip_addr_t *ipaddr,
+err_t            new_tcp_connect (struct tcp_pcb *pcb, const ip_addr_t *ipaddr,
                               u16_t port, tcp_connected_fn connected);
 
 // struct tcp_pcb * tcp_listen_with_backlog_and_err(struct tcp_pcb *pcb, u8_t backlog, err_t *err);
-struct tcp_pcb * tcp_listen_with_backlog(struct tcp_pcb *pcb, u8_t backlog);
+struct tcp_pcb * new_tcp_listen_with_backlog(struct tcp_pcb *pcb, u8_t backlog);
 // /** @ingroup tcp_raw */
-// #define          tcp_listen(pcb) tcp_listen_with_backlog(pcb, TCP_DEFAULT_LISTEN_BACKLOG)
+// #define          tcp_listen(pcb) new_tcp_listen_with_backlog(pcb, TCP_DEFAULT_LISTEN_BACKLOG)
 
-void             tcp_abort (struct tcp_pcb *pcb);
-err_t            tcp_close   (struct tcp_pcb *pcb);
+void             new_tcp_abort (struct tcp_pcb *pcb);
+err_t            new_tcp_close   (struct tcp_pcb *pcb);
 // err_t            tcp_shutdown(struct tcp_pcb *pcb, int shut_rx, int shut_tx);
 
-// /* Flags for "apiflags" parameter in tcp_write */
+// /* Flags for "apiflags" parameter in new_tcp_write */
 // #define TCP_WRITE_FLAG_COPY 0x01
 // #define TCP_WRITE_FLAG_MORE 0x02
 
-err_t            tcp_write   (struct tcp_pcb *pcb, const void *dataptr, u16_t len,
+err_t            new_tcp_write   (struct tcp_pcb *pcb, const void *dataptr, u16_t len,
                               u8_t apiflags);
 
 // void             tcp_setprio (struct tcp_pcb *pcb, u8_t prio);
@@ -435,7 +435,7 @@ err_t            tcp_write   (struct tcp_pcb *pcb, const void *dataptr, u16_t le
 // #define TCP_PRIO_NORMAL 64
 // #define TCP_PRIO_MAX    127
 
-err_t            tcp_output  (struct tcp_pcb *pcb);
+err_t            new_tcp_output  (struct tcp_pcb *pcb);
 
 // //Realtek add
 // #if LWIP_RANDOMIZE_INITIAL_LOCAL_PORTS
@@ -446,7 +446,7 @@ err_t            tcp_output  (struct tcp_pcb *pcb);
 // const char* tcp_debug_state_str(enum tcp_state s);
 
 // /* for compatibility with older implementation */
-// #define tcp_new_ip6() tcp_new_ip_type(IPADDR_TYPE_V6)
+// #define tcp_new_ip6() new_tcp_new_ip_type(IPADDR_TYPE_V6)
 
 #ifdef __cplusplus
 }

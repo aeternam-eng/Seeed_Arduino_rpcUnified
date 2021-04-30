@@ -1,6 +1,6 @@
 /**
  * @file
- * ICMP protocol definitions
+ * Heap API
  */
 
 /*
@@ -34,58 +34,45 @@
  * Author: Adam Dunkels <adam@sics.se>
  *
  */
-#ifndef LWIP_HDR_PROT_ICMP_H
-#define LWIP_HDR_PROT_ICMP_H
+#ifndef LWIP_HDR_MEM_H
+#define LWIP_HDR_MEM_H
 
-#include "lwip/arch.h"
+#include "new_lwip/opt.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-#define ICMP_ER   0    /* echo reply */
-#define ICMP_DUR  3    /* destination unreachable */
-#define ICMP_SQ   4    /* source quench */
-#define ICMP_RD   5    /* redirect */
-#define ICMP_ECHO 8    /* echo */
-#define ICMP_TE  11    /* time exceeded */
-#define ICMP_PP  12    /* parameter problem */
-#define ICMP_TS  13    /* timestamp */
-#define ICMP_TSR 14    /* timestamp reply */
-#define ICMP_IRQ 15    /* information request */
-#define ICMP_IR  16    /* information reply */
-#define ICMP_AM  17    /* address mask request */
-#define ICMP_AMR 18    /* address mask reply */
 
-#ifdef PACK_STRUCT_USE_INCLUDES
-#  include "arch/bpstruct.h"
-#endif
-/** This is the standard ICMP header only that the u32_t data
- *  is split to two u16_t like ICMP echo needs it.
- *  This header is also used for other ICMP types that do not
- *  use the data part.
+#if MEM_LIBC_MALLOC
+
+#include "new_lwip/arch.h"
+
+typedef size_t mem_size_t;
+#define MEM_SIZE_F SZT_F
+
+#elif MEM_USE_POOLS
+
+typedef u16_t mem_size_t;
+#define MEM_SIZE_F U16_F
+
+#else
+
+/* MEM_SIZE would have to be aligned, but using 64000 here instead of
+ * 65535 leaves some room for alignment...
  */
-PACK_STRUCT_BEGIN
-struct icmp_echo_hdr {
-  PACK_STRUCT_FLD_8(u8_t type);
-  PACK_STRUCT_FLD_8(u8_t code);
-  PACK_STRUCT_FIELD(u16_t chksum);
-  PACK_STRUCT_FIELD(u16_t id);
-  PACK_STRUCT_FIELD(u16_t seqno);
-} PACK_STRUCT_STRUCT;
-PACK_STRUCT_END
-#ifdef PACK_STRUCT_USE_INCLUDES
-#  include "arch/epstruct.h"
+#if MEM_SIZE > 64000L
+typedef u32_t mem_size_t;
+#define MEM_SIZE_F U32_F
+#else
+typedef u16_t mem_size_t;
+#define MEM_SIZE_F U16_F
+#endif /* MEM_SIZE > 64000 */
 #endif
 
-/* Compatibility defines, old versions used to combine type and code to an u16_t */
-#define ICMPH_TYPE(hdr) ((hdr)->type)
-#define ICMPH_CODE(hdr) ((hdr)->code)
-#define ICMPH_TYPE_SET(hdr, t) ((hdr)->type = (t))
-#define ICMPH_CODE_SET(hdr, c) ((hdr)->code = (c))
+//void  mem_init(void);
+//void *mem_trim(void *mem, mem_size_t size);
+void *mem_malloc(mem_size_t size);
+//void *mem_calloc(mem_size_t count, mem_size_t size);
+void  mem_free(void *mem);
 
-#ifdef __cplusplus
-}
-#endif
 
-#endif /* LWIP_HDR_PROT_ICMP_H */
+
+#endif /* LWIP_HDR_MEM_H */

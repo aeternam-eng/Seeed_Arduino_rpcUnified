@@ -37,16 +37,16 @@
 #ifndef LWIP_HDR_IP_H
 #define LWIP_HDR_IP_H
 
-#include "lwip/opt.h"
+#include "new_lwip/opt.h"
 
-#include "lwip/def.h"
-#include "lwip/pbuf.h"
-#include "lwip/ip_addr.h"
-#include "lwip/err.h"
-// #include "lwip/netif.h"
-// #include "lwip/ip4.h"
-// #include "lwip/ip6.h"
-#include "lwip/prot/ip.h"
+#include "new_lwip/def.h"
+#include "new_lwip/pbuf.h"
+#include "new_lwip/ip_addr.h"
+#include "new_lwip/err.h"
+// #include "new_lwip/netif.h"
+// #include "new_lwip/ip4.h"
+// #include "new_lwip/ip6.h"
+#include "new_lwip/prot/ip.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -129,11 +129,11 @@ extern "C" {
 // /** Get the interface that accepted the current packet.
 //  * This may or may not be the receiving netif, depending on your netif/network setup.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip_current_netif()      (ip_data.current_netif)
 // /** Get the interface that received the current packet.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip_current_input_netif() (ip_data.current_input_netif)
 // /** Total header length of ip(6)_current_header() (i.e. after this, the UDP/TCP header starts) */
 // #define ip_current_header_tot_len() (ip_data.current_ip_header_tot_len)
@@ -145,11 +145,11 @@ extern "C" {
 // #if LWIP_IPV4 && LWIP_IPV6
 // /** Get the IPv4 header of the current packet.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip4_current_header()     ((const struct ip_hdr*)(ip_data.current_ip4_header))
 // /** Get the IPv6 header of the current packet.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip6_current_header()      ((const struct ip6_hdr*)(ip_data.current_ip6_header))
 // /** Returns TRUE if the current IP input packet is IPv6, FALSE if it is IPv4 */
 // #define ip_current_is_v6()        (ip6_current_header() != NULL)
@@ -174,7 +174,7 @@ extern "C" {
 
 // /** Get the IPv4 header of the current packet.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip4_current_header()     ((const struct ip_hdr*)(ip_data.current_ip4_header))
 // /** Always returns FALSE when only supporting IPv4 only */
 // #define ip_current_is_v6()        0
@@ -191,7 +191,7 @@ extern "C" {
 
 // /** Get the IPv6 header of the current packet.
 //  * This function must only be called from a receive callback (udp_recv,
-//  * raw_recv, tcp_accept). It will return NULL otherwise. */
+//  * raw_recv, new_tcp_accept). It will return NULL otherwise. */
 // #define ip6_current_header()      ((const struct ip6_hdr*)(ip_data.current_ip6_header))
 // /** Always returns TRUE when only supporting IPv6 only */
 // #define ip_current_is_v6()        1

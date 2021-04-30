@@ -118,7 +118,7 @@
 
 /** Override calloc(), free() except for case where memory allocation scheme is not set to custom */
 #ifndef CONFIG_MBEDTLS_CUSTOM_MEM_ALLOC
-#include "esp_mem.h"
+#include "esp/esp_mem.h"
 #define MBEDTLS_PLATFORM_STD_CALLOC		esp_mbedtls_mem_calloc
 #define MBEDTLS_PLATFORM_STD_FREE		esp_mbedtls_mem_free
 #endif

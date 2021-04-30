@@ -11,7 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#pragma once
+#ifndef __ESP_ERR_H__
+#define __ESP_ERR_H__
 
 #include <stdint.h>
 #include <stdio.h>
@@ -157,4 +158,6 @@ void _esp_error_check_failed_without_abort(esp_err_t rc, const char* file, int l
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

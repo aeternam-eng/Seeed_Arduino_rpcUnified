@@ -16,7 +16,7 @@ using namespace erpc;
 #define NO_CTS_PIN 255
 #define RTS_RX_THRESHOLD 10
 
-EUart::EUart(SERCOM *_s, uint8_t _pinRX, uint8_t _pinTX, SercomRXPad _padRX, SercomUartTXPad _padTX) : EUart(_s, _pinRX, _pinTX, _padRX, _padTX, NO_RTS_PIN, NO_CTS_PIN)
+/*EUart::EUart(SERCOM *_s, uint8_t _pinRX, uint8_t _pinTX, SercomRXPad _padRX, SercomUartTXPad _padTX) : EUart(_s, _pinRX, _pinTX, _padRX, _padTX, NO_RTS_PIN, NO_CTS_PIN)
 {
 }
 
@@ -249,7 +249,7 @@ SercomParityMode EUart::extractParity(uint16_t config)
   case HARDSER_PARITY_ODD:
     return SERCOM_ODD_PARITY;
   }
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables
@@ -270,7 +270,6 @@ UartTransport::~UartTransport(void)
 
 erpc_status_t UartTransport::init(void)
 {
-
   m_uartDrv->begin(m_baudrate);
   return kErpcStatus_Success;
 }
@@ -286,6 +285,7 @@ erpc_status_t UartTransport::underlyingReceive(uint8_t *data, uint32_t size)
     if (c < 0) continue;
     data[bytesRead++] = static_cast<uint8_t>(c);
   }
+
   return kErpcStatus_Success; // return size != bytesRead ? kErpcStatus_ReceiveFailed : kErpcStatus_Success;
 }
 
@@ -294,9 +294,9 @@ erpc_status_t UartTransport::underlyingSend(const uint8_t *data, uint32_t size)
   uint32_t sentSize = 0;
   while (sentSize < size)
   {
-    const uint32_t sendSize = min(size - sentSize, 256);
+    const uint32_t sendSize = min(size - sentSize, (uint32_t)256);
     sentSize += m_uartDrv->write(&data[sentSize], sendSize);
-    delay(4);
+    delay(10);
   }
   return kErpcStatus_Success; // return size != offset ? kErpcStatus_SendFailed : kErpcStatus_Success;
 }

@@ -27,12 +27,12 @@ namespace erpc {
 
 
 #include "HardwareSerial.h"
-#include "SERCOM.h"
+//#include "SERCOM.h"
 #include "RingBuffer.h"
 
 #include <cstddef>
 
-class EUart : public HardwareSerial
+/*class EUart : public HardwareSerial
 {
   public:
     EUart(SERCOM *_s, uint8_t _pinRX, uint8_t _pinTX, SercomRXPad _padRX, SercomUartTXPad _padTX);
@@ -70,7 +70,7 @@ class EUart : public HardwareSerial
     SercomNumberStopBit extractNbStopBit(uint16_t config);
     SercomUartCharSize extractCharSize(uint16_t config);
     SercomParityMode extractParity(uint16_t config);
-};
+};*/
 
 /*!
  * @brief Very basic transport to send/receive messages via EUart.

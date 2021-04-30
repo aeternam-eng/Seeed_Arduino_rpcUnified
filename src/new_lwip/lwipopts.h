@@ -345,7 +345,7 @@
 
 
 /**
-    TCP_OVERSIZE: The maximum number of bytes that tcp_write may
+    TCP_OVERSIZE: The maximum number of bytes that new_tcp_write may
     allocate ahead of time
 */
 #ifdef CONFIG_TCP_OVERSIZE_MSS

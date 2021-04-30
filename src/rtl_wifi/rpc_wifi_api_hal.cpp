@@ -7,17 +7,14 @@
 #include "esp/esp_lib_unified.h"
 #include "rpc_wifi_api_hal.h"
 #include "rpc_wifi_api_utils.h"
-#include "lwip/err.h"
-#include "lwip/tcp.h"
-#include "lwip/priv/tcpip_priv.h"
-#include "lwip/ip4_addr.h"
-#include "lwip/inet_chksum.h"
-#include "lwip/mem.h"
+#include "new_lwip/err.h"
+#include "new_lwip/tcp.h"
+
 int wifi_mode = RTW_MODE_NONE;
 
-uint32_t wifi_get_netif(tcpip_adapter_if_t tcpip_if)
+uint32_t wifi_get_netif(rpc_tcpip_adapter_if_t tcpip_if)
 {
-    if(wifi_mode == RTW_MODE_STA_AP && tcpip_if == TCPIP_ADAPTER_IF_AP){
+    if(wifi_mode == RTW_MODE_STA_AP && tcpip_if == RPC_TCPIP_ADAPTER_IF_AP){
          return 1;
     }
 
@@ -225,7 +222,7 @@ int wifi_get_ap_info(rtw_bss_info_t *ap_info, rtw_security_t *security)
     return ret;
 }
 
-int wifi_set_country(rtw_country_code_t country_code)
+int new_wifi_set_country(rtw_country_code_t country_code)
 {
     RPC_FUN_RETURN_1(wifi_set_country, (uint32_t)country_code, int);
 }
@@ -625,19 +622,19 @@ int32_t wifi_scan_get_ap_records(uint16_t number, wifi_ap_record_t *_scanResult)
 //! @name rpc_wifi_tcpip
 //@{
 
-void tcpip_adapter_init(void)
+void new_tcpip_adapter_init(void)
 {
     RPC_FUN_RETURN_VOID_0(tcpip_adapter_init);
 }
 
-esp_err_t tcpip_adapter_eth_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info)
+esp_err_t new_tcpip_adapter_eth_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info)
 {
     (void)mac;
     (void)ip_info;
     return ESP_FAIL;
 }
 
-esp_err_t tcpip_adapter_sta_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info)
+esp_err_t new_tcpip_adapter_sta_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info)
 {
     FUNC_ENTRY;
     esp_err_t ret = ESP_OK;
@@ -649,14 +646,14 @@ esp_err_t tcpip_adapter_sta_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info
     binary_t _ip_info;
     _mac.dataLength = strlen((char *)mac) + 1;
     _mac.data = mac;
-    _ip_info.dataLength = sizeof(tcpip_adapter_ip_info_t);
+    _ip_info.dataLength = sizeof(rpc_tcpip_adapter_ip_info_t);
     _ip_info.data = (uint8_t *)ip_info;
     ret = (esp_err_t)rpc_tcpip_adapter_sta_start(&_mac, &_ip_info);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t tcpip_adapter_ap_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info)
+esp_err_t new_tcpip_adapter_ap_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info)
 {
     FUNC_ENTRY;
     esp_err_t ret = ESP_OK;
@@ -668,35 +665,35 @@ esp_err_t tcpip_adapter_ap_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info)
     binary_t _ip_info;
     _mac.dataLength = strlen((char *)mac) + 1;
     _mac.data = mac;
-    _ip_info.dataLength = sizeof(tcpip_adapter_ip_info_t);
+    _ip_info.dataLength = sizeof(rpc_tcpip_adapter_ip_info_t);
     _ip_info.data = (uint8_t *)ip_info;
     ret = (esp_err_t)rpc_tcpip_adapter_ap_start(&_mac, &_ip_info);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t tcpip_adapter_stop(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_stop(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
 
     RPC_FUN_RETURN_1(tcpip_adapter_stop, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_up(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_up(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
 
     RPC_FUN_RETURN_1(tcpip_adapter_up, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_down(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_down(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
 
     RPC_FUN_RETURN_1(tcpip_adapter_down, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_get_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_ip_info_t *ip_info)
+esp_err_t new_tcpip_adapter_get_ip_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_ip_info_t *ip_info)
 {
     FUNC_ENTRY;
     uint32_t netif = wifi_get_netif(tcpip_if);
@@ -709,11 +706,11 @@ esp_err_t tcpip_adapter_get_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_i
     ret = (esp_err_t)rpc_tcpip_adapter_get_ip_info((uint32_t)netif, &_ip_info);
     if (ret == ESP_OK)
     {
-        memcpy(ip_info, _ip_info.data, sizeof(tcpip_adapter_ip_info_t));
+        memcpy(ip_info, _ip_info.data, sizeof(rpc_tcpip_adapter_ip_info_t));
     }
-    // tcpip_adapter_ip_info_t *temp = (tcpip_adapter_ip_info_t *)_ip_info.data;
-    // RPC_DEBUG("netif:%d ip_addr:%d netmask:%d, gw:%d", netif, ip_info->ip, ip_info->netmask, ip_info->gw);
-    // RPC_DEBUG("netif:%d ip_addr:%d netmask:%d, gw:%d", netif, temp->ip, temp->netmask, temp->gw);
+    rpc_tcpip_adapter_ip_info_t *temp = (rpc_tcpip_adapter_ip_info_t *)_ip_info.data;
+    RPC_DEBUG("netif:%d ip_addr:%d netmask:%d, gw:%d", netif, ip_info->ip, ip_info->netmask, ip_info->gw);
+    RPC_DEBUG("netif:%d ip_addr:%d netmask:%d, gw:%d", netif, temp->ip, temp->netmask, temp->gw);
     if (_ip_info.data != NULL)
     {
         erpc_free(_ip_info.data);
@@ -723,7 +720,7 @@ esp_err_t tcpip_adapter_get_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_i
     return ret;
 }
 
-esp_err_t tcpip_adapter_set_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_ip_info_t *ip_info)
+esp_err_t new_tcpip_adapter_set_ip_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_ip_info_t *ip_info)
 {
     FUNC_ENTRY;
     uint32_t netif = wifi_get_netif(tcpip_if);
@@ -733,14 +730,14 @@ esp_err_t tcpip_adapter_set_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_i
         return ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS;
     }
     binary_t _ip_info;
-    _ip_info.dataLength = sizeof(tcpip_adapter_ip_info_t);
+    _ip_info.dataLength = sizeof(rpc_tcpip_adapter_ip_info_t);
     _ip_info.data = (uint8_t *)ip_info;
     ret = (esp_err_t)rpc_tcpip_adapter_set_ip_info((uint32_t)netif, &_ip_info);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t tcpip_adapter_set_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_dns_type_t type, tcpip_adapter_dns_info_t *dns)
+esp_err_t new_tcpip_adapter_set_dns_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_dns_type_t type, rpc_tcpip_adapter_dns_info_t *dns)
 {
     FUNC_ENTRY;
     esp_err_t ret = ESP_OK;
@@ -750,14 +747,14 @@ esp_err_t tcpip_adapter_set_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_
         return ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS;
     }
     binary_t _dns;
-    _dns.dataLength = sizeof(tcpip_adapter_dns_info_t);
+    _dns.dataLength = sizeof(rpc_tcpip_adapter_dns_info_t);
     _dns.data = (uint8_t *)dns;
     ret = (esp_err_t)rpc_tcpip_adapter_set_dns_info((uint32_t)netif, (uint32_t)type, &_dns);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t tcpip_adapter_get_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_dns_type_t type, tcpip_adapter_dns_info_t *dns)
+esp_err_t new_tcpip_adapter_get_dns_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_dns_type_t type, rpc_tcpip_adapter_dns_info_t *dns)
 {
     FUNC_ENTRY;
     uint32_t netif = wifi_get_netif(tcpip_if);
@@ -770,7 +767,7 @@ esp_err_t tcpip_adapter_get_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_
     ret = (esp_err_t)rpc_tcpip_adapter_get_dns_info((uint32_t)netif, (uint32_t)type, &_dns);
     if (ret == ESP_OK)
     {
-        memcpy(dns, _dns.data, sizeof(tcpip_adapter_dns_info_t));
+        memcpy(dns, _dns.data, sizeof(rpc_tcpip_adapter_dns_info_t));
     }
     if (_dns.data != NULL)
     {
@@ -781,7 +778,7 @@ esp_err_t tcpip_adapter_get_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_
     return ret;
 }
 
-esp_err_t tcpip_adapter_get_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac)
+esp_err_t new_tcpip_adapter_get_mac(rpc_tcpip_adapter_if_t tcpip_if, uint8_t *mac)
 {
     FUNC_ENTRY;
     uint32_t netif = wifi_get_netif(tcpip_if);
@@ -805,7 +802,7 @@ esp_err_t tcpip_adapter_get_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac)
     return ret;
 }
 
-esp_err_t tcpip_adapter_set_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac)
+esp_err_t new_tcpip_adapter_set_mac(rpc_tcpip_adapter_if_t tcpip_if, uint8_t *mac)
 {
     FUNC_ENTRY;
     uint32_t netif = wifi_get_netif(tcpip_if);
@@ -822,31 +819,31 @@ esp_err_t tcpip_adapter_set_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac)
     return ret;
 }
 
-esp_err_t tcpip_adapter_dhcps_start(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_dhcps_start(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
     RPC_FUN_RETURN_1(tcpip_adapter_dhcps_start, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_dhcps_stop(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_dhcps_stop(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
     RPC_FUN_RETURN_1(tcpip_adapter_dhcps_stop, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_dhcpc_start(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_dhcpc_start(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
     RPC_FUN_RETURN_1(tcpip_adapter_dhcpc_start, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_dhcpc_stop(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_dhcpc_stop(rpc_tcpip_adapter_if_t tcpip_if)
 {
     uint32_t netif = wifi_get_netif(tcpip_if);
     RPC_FUN_RETURN_1(tcpip_adapter_dhcpc_stop, (uint32_t)netif, esp_err_t);
 }
 
-esp_err_t tcpip_adapter_set_hostname(tcpip_adapter_if_t tcpip_if, const char *hostname)
+esp_err_t new_tcpip_adapter_set_hostname(rpc_tcpip_adapter_if_t tcpip_if, const char *hostname)
 {
     FUNC_ENTRY;
     FUNC_EXIT;
@@ -855,7 +852,7 @@ esp_err_t tcpip_adapter_set_hostname(tcpip_adapter_if_t tcpip_if, const char *ho
     return ESP_FAIL;
 }
 
-esp_err_t tcpip_adapter_get_hostname(tcpip_adapter_if_t tcpip_if, const char **hostname)
+esp_err_t new_tcpip_adapter_get_hostname(rpc_tcpip_adapter_if_t tcpip_if, const char **hostname)
 {
     FUNC_ENTRY;
     (void)tcpip_if;
@@ -865,7 +862,7 @@ esp_err_t tcpip_adapter_get_hostname(tcpip_adapter_if_t tcpip_if, const char **h
     return ESP_OK;
 }
 
-esp_err_t tcpip_adapter_dhcps_option(tcpip_adapter_option_mode_t opt_op, tcpip_adapter_option_id_t opt_id,
+esp_err_t new_tcpip_adapter_dhcps_option(rpc_tcpip_adapter_option_mode_t opt_op, rpc_tcpip_adapter_option_id_t opt_id,
                                      void *opt_val, uint32_t opt_len)
 
 {
@@ -878,7 +875,7 @@ esp_err_t tcpip_adapter_dhcps_option(tcpip_adapter_option_mode_t opt_op, tcpip_a
     return ESP_FAIL;
 }
 
-esp_err_t tcpip_adapter_create_ip6_linklocal(tcpip_adapter_if_t tcpip_if)
+esp_err_t new_tcpip_adapter_create_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if)
 {
     FUNC_ENTRY;
     (void)tcpip_if;
@@ -886,7 +883,7 @@ esp_err_t tcpip_adapter_create_ip6_linklocal(tcpip_adapter_if_t tcpip_if)
     return ESP_FAIL;
 }
 
-esp_err_t tcpip_adapter_get_ip6_linklocal(tcpip_adapter_if_t tcpip_if, ip6_addr_t *if_ip6)
+esp_err_t new_tcpip_adapter_get_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if, ip6_addr_t *if_ip6)
 {
     FUNC_ENTRY;
     (void)tcpip_if;
@@ -908,13 +905,13 @@ void system_event_callback_reg(system_event_cb_t system_event_cb)
 }
 //@}
 
-err_t tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call)
+err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call)
 {
     RPC_DEBUG("call");
     return fn(call);
 }
 
-err_t tcp_connect(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port, tcp_connected_fn connected)
+err_t new_tcp_connect(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port, tcp_connected_fn connected)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -950,7 +947,7 @@ err_t tcp_connect(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port, tcp_c
     return ret;
 }
 
-void tcp_recved(struct tcp_pcb *pcb, u16_t len)
+void new_tcp_recved(struct tcp_pcb *pcb, u16_t len)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -975,7 +972,7 @@ void tcp_recved(struct tcp_pcb *pcb, u16_t len)
     }
 }
 
-void tcp_abort(struct tcp_pcb *pcb)
+void new_tcp_abort(struct tcp_pcb *pcb)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1000,7 +997,7 @@ void tcp_abort(struct tcp_pcb *pcb)
     }
 }
 
-err_t tcp_write(struct tcp_pcb *pcb, const void *dataptr, u16_t len,u8_t apiflags)
+err_t new_tcp_write(struct tcp_pcb *pcb, const void *dataptr, u16_t len,u8_t apiflags)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1031,7 +1028,7 @@ err_t tcp_write(struct tcp_pcb *pcb, const void *dataptr, u16_t len,u8_t apiflag
     return ret;
 }
 
-err_t tcp_output(struct tcp_pcb *pcb)
+err_t new_tcp_output(struct tcp_pcb *pcb)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1058,7 +1055,7 @@ err_t tcp_output(struct tcp_pcb *pcb)
     return ret;
 }
 
-err_t tcp_close(struct tcp_pcb *pcb)
+err_t new_tcp_close(struct tcp_pcb *pcb)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1093,7 +1090,7 @@ err_t tcp_close(struct tcp_pcb *pcb)
     return ret;
 }
 
-err_t tcp_bind(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port)
+err_t new_tcp_bind(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1127,7 +1124,7 @@ err_t tcp_bind(struct tcp_pcb *pcb, const ip_addr_t *ipaddr,u16_t port)
     return ret;
 }
 
-struct tcp_pcb * tcp_listen_with_backlog(struct tcp_pcb *pcb, u8_t backlog)
+struct tcp_pcb * new_tcp_listen_with_backlog(struct tcp_pcb *pcb, u8_t backlog)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1156,7 +1153,7 @@ struct tcp_pcb * tcp_listen_with_backlog(struct tcp_pcb *pcb, u8_t backlog)
     return pcb;
 }
 
-struct tcp_pcb * tcp_new_ip_type (u8_t type)
+struct tcp_pcb * new_tcp_new_ip_type (u8_t type)
 {
     tcp_pcb * pcb = NULL;
     binary_t pcb_out_b;
@@ -1182,7 +1179,7 @@ struct tcp_pcb * tcp_new_ip_type (u8_t type)
     return pcb;
 }
 
-void tcp_arg(struct tcp_pcb *pcb, void *arg)
+void new_tcp_arg(struct tcp_pcb *pcb, void *arg)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1212,7 +1209,7 @@ void tcp_arg(struct tcp_pcb *pcb, void *arg)
     }
 }
 
-void tcp_accept(struct tcp_pcb *pcb, tcp_accept_fn accept)
+void new_tcp_accept(struct tcp_pcb *pcb, tcp_accept_fn accept)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1242,7 +1239,7 @@ void tcp_accept(struct tcp_pcb *pcb, tcp_accept_fn accept)
     }
 }
 
-void tcp_err(struct tcp_pcb *pcb, tcp_err_fn err)
+void new_tcp_err(struct tcp_pcb *pcb, tcp_err_fn err)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1272,7 +1269,7 @@ void tcp_err(struct tcp_pcb *pcb, tcp_err_fn err)
     }
 }
 
-void tcp_recv(struct tcp_pcb *pcb, tcp_recv_fn recv)
+void new_tcp_recv(struct tcp_pcb *pcb, tcp_recv_fn recv)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1302,7 +1299,7 @@ void tcp_recv(struct tcp_pcb *pcb, tcp_recv_fn recv)
     }
 }
 
-void tcp_sent(struct tcp_pcb *pcb, tcp_sent_fn sent)
+void new_tcp_sent(struct tcp_pcb *pcb, tcp_sent_fn sent)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1332,7 +1329,7 @@ void tcp_sent(struct tcp_pcb *pcb, tcp_sent_fn sent)
     }
 }
 
-void tcp_poll(struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interval)
+void new_tcp_poll(struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interval)
 {
     binary_t pcb_out_b;
     binary_t pcb_in_b;
@@ -1362,7 +1359,7 @@ void tcp_poll(struct tcp_pcb *pcb, tcp_poll_fn poll, u8_t interval)
     }
 }
 
-u8_t pbuf_free(struct pbuf *p)
+u8_t new_pbuf_free(struct pbuf *p)
 {
     binary_t p_b;
     int32_t addr;
@@ -1389,7 +1386,7 @@ u8_t pbuf_free(struct pbuf *p)
     return (u8_t)ret;
 }
 
-char * ip4addr_ntoa(const ip4_addr_t *ip4_addr)
+char * new_ip4addr_ntoa(const ip4_addr_t *ip4_addr)
 {
     binary_t ip4_addr_in_b;
     int32_t rpc_ip4_addr;

@@ -9,6 +9,8 @@
 #include <new>
 #include "erpc_port.h"
 #include "erpc_manually_constructed.h"
+#include "esp/esp_event.h"
+#include "esp/esp_hal_log.h"
 
 #if 10704 != ERPC_VERSION_NUMBER
 #error "The generated shim code version is different to the rest of eRPC code."
@@ -116,6 +118,7 @@ erpc_status_t rpc_wifi_callback_service::rpc_wifi_event_callback_shim(Codec * co
     err = codec->getStatus();
     if (!err)
     {
+        system_event_t *event_data = (system_event_t *)event->data;
         // Invoke the actual served function.
 #if ERPC_NESTED_CALLS_DETECTION
         nestingDetection = true;

@@ -13,6 +13,8 @@
 #include "erpc/erpc_port.h"
 #include "erpc/erpc_shim_unified.h"
 
+#include "freertos/FreeRTOS.h"
+
 using namespace erpc;
 
 class MyMessageBufferFactory : public MessageBufferFactory
@@ -32,8 +34,8 @@ public:
         }
     }
 };
-//#define ble_uart Serial1
-#define PIN_BLE_SERIAL_X_RX (84ul)
+#define ble_uart Serial2
+/*#define PIN_BLE_SERIAL_X_RX (84ul)
 #define PIN_BLE_SERIAL_X_TX (85ul)
 #define PAD_BLE_SERIAL_X_RX (SERCOM_RX_PAD_2)
 #define PAD_BLE_SERIAL_X_TX (UART_TX_PAD_0)
@@ -60,8 +62,9 @@ EUart ble_uart(&SERCOM_BLE_SERIAL_X, PIN_BLE_SERIAL_X_RX, PIN_BLE_SERIAL_X_TX, P
 extern "C"
 {
     INTERRUPT_HANDLER_IMPLEMENT_BLE_SERIAL_X(ble_uart)
-}
+}*/
 
+//HardwareSerial ble_uart = HardwareSerial(2);
 UartTransport g_transport(&ble_uart, 614400);
 MyMessageBufferFactory g_msgFactory;
 BasicCodecFactory g_basicCodecFactory;
@@ -69,9 +72,6 @@ ArbitratedClientManager *g_client;
 TransportArbitrator g_arbitrator;
 SimpleServer g_server;
 Crc16 g_crc16;
-
-// setup and loop code block
-extern void _real_body();
 
 /**
  * @brief  Initialize erpc server task
@@ -83,34 +83,53 @@ void add_services(erpc::SimpleServer *server)
     server->addService(static_cast<erpc::Service *>(create_rpc_wifi_callback_service()));
 }
 
+extern void loopTask(void *pvParameters);
+
 void runClient(void *arg)
 {
     (void)arg;
     delay(100);
-    _real_body();
+
+    log_d("clientThread running");
+    //loopTask(NULL);
 }
 
 void runServer(void *arg)
 {
     (void)arg;
     /* run server */
-    while (true)
-    {
-        g_server.poll();
-        delay(20);
+    log_d("serverThread running");
+    for(;;) {
+        uint8_t result = g_server.poll();
+        //log_d("Running poll: %d\n", result);
+        if(result != kErpcStatus_Success) {
+            //vTaskDelete(NULL);
+            log_d("eRPC polling has returned other than success");
+            //g_server.poll();
+            //esp_restart();
+            //break;
+        }
+        taskYIELD();
+        //vTaskDelay(10);
     }
 }
 
-Thread serverThread(&runServer, configMAX_PRIORITIES, 8192, "runServer");
-Thread clientThread(&runClient, configMAX_PRIORITIES - 2, 20480, "runClient");
+Thread serverThread(&runServer, configMAX_PRIORITIES, 32768, "runServer");
+//Thread clientThread(&runClient, configMAX_PRIORITIES - 2, 64575, "runClient");
 
 void erpc_init()
 {
+    pinMode(16, INPUT_PULLUP);
+    pinMode(17, INPUT_PULLUP);
+
+    #define RTL8720D_CHIP_PU 4
+
     pinMode(RTL8720D_CHIP_PU, OUTPUT);
     digitalWrite(RTL8720D_CHIP_PU, LOW);
     delay(100);
     digitalWrite(RTL8720D_CHIP_PU, HIGH);
-    delay(100);
+    delay(800);
+
     g_transport.init();
     g_arbitrator.setSharedTransport(&g_transport);
     g_arbitrator.setCodec(g_basicCodecFactory.create());
@@ -129,22 +148,15 @@ void erpc_init()
     add_services(&g_server);
 
     serverThread.start();
-    clientThread.start();
+    //clientThread.start();
 
     g_client->setServer(&g_server);
     g_client->setServerThreadId(serverThread.getThreadId());
+
+    log_d("g_client initialized");
 }
 
-void _wrap_body()
-{
+void init() {
     Serial.begin(115200);
-
     erpc_init();
-
-    vTaskStartScheduler();
-
-    while (1)
-        ;
-
-    return;
 }

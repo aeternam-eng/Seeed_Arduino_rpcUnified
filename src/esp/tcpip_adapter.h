@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _TCPIP_ADAPTER_H_
-#define _TCPIP_ADAPTER_H_
+#ifndef _RPCTCPIP_ADAPTER_H_
+#define _RPCTCPIP_ADAPTER_H_
 
 /**
     @brief TCPIP adapter library
@@ -25,7 +25,7 @@
     by using the specific APIs of that stack. The macros in CONFIG_TCPIP_LWIP should be
     re-defined.
 
-    tcpip_adapter_init should be called in the start of app_main for only once.
+    new_tcpip_adapter_init should be called in the start of app_main for only once.
 
     Currently most adapter APIs are called in event_default_handlers.c.
 
@@ -37,11 +37,11 @@
 */
 
 #include <stdint.h>
-#include "esp_wifi_types.h"
+#include "esp/esp_wifi_types.h"
 #include "sdkconfig.h"
 
 #if 1 || CONFIG_TCPIP_LWIP
-#include "lwip/ip_addr.h"
+#include "new_lwip/ip_addr.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,7 +58,7 @@ typedef struct ip6_addr {
 
 /** @ingroup ipaddr
     IP address types for use in ip_addr_t.type member.
-    @see tcp_new_ip_type(), udp_new_ip_type(), raw_new_ip_type().
+    @see new_tcp_new_ip_type(), udp_new_ip_type(), raw_new_ip_type().
 */
 enum lwip_ip_addr_type {
     /** IPv4 */
@@ -88,7 +88,7 @@ typedef struct {
     bool enable;
     ip4_addr_t start_ip;
     ip4_addr_t end_ip;
-} dhcps_lease_t;
+} new_dhcps_lease_t;
 
 #define IP2STR(ipaddr) ip4_addr1_16(ipaddr), \
     ip4_addr2_16(ipaddr), \
@@ -112,23 +112,23 @@ typedef struct {
     ip4_addr_t ip;
     ip4_addr_t netmask;
     ip4_addr_t gw;
-} tcpip_adapter_ip_info_t;
+} rpc_tcpip_adapter_ip_info_t;
 
 typedef struct {
     ip6_addr_t ip;
-} tcpip_adapter_ip6_info_t;
+} rpc_tcpip_adapter_ip6_info_t;
 
-typedef dhcps_lease_t tcpip_adapter_dhcps_lease_t;
+typedef new_dhcps_lease_t rpc_tcpip_adapter_dhcps_lease_t;
 
 typedef struct {
     uint8_t mac[6];
     ip4_addr_t ip;
-} tcpip_adapter_sta_info_t;
+} rpc_tcpip_adapter_sta_info_t;
 
 typedef struct {
-    tcpip_adapter_sta_info_t sta[ESP_WIFI_MAX_CONN_NUM];
+    rpc_tcpip_adapter_sta_info_t sta[ESP_WIFI_MAX_CONN_NUM];
     int num;
-} tcpip_adapter_sta_list_t;
+} rpc_tcpip_adapter_sta_list_t;
 
 #endif
 
@@ -141,49 +141,49 @@ typedef struct {
 #define ESP_ERR_TCPIP_ADAPTER_NO_MEM                ESP_ERR_TCPIP_ADAPTER_BASE + 0x06
 #define ESP_ERR_TCPIP_ADAPTER_DHCP_NOT_STOPPED      ESP_ERR_TCPIP_ADAPTER_BASE + 0x07
 
-typedef enum {
-    TCPIP_ADAPTER_IF_STA = 0,     /**< ESP32 station interface */
-    TCPIP_ADAPTER_IF_AP,          /**< ESP32 soft-AP interface */
-    TCPIP_ADAPTER_IF_ETH,         /**< ESP32 ethernet interface */
-    TCPIP_ADAPTER_IF_MAX
-} tcpip_adapter_if_t;
+typedef enum  {
+    RPC_TCPIP_ADAPTER_IF_STA = 0,     /**< ESP32 station interface */
+    RPC_TCPIP_ADAPTER_IF_AP,          /**< ESP32 soft-AP interface */
+    RPC_TCPIP_ADAPTER_IF_ETH,         /**< ESP32 ethernet interface */
+    RPC_TCPIP_ADAPTER_IF_MAX
+} rpc_tcpip_adapter_if_t;
 
 /*type of DNS server*/
-typedef enum {
-    TCPIP_ADAPTER_DNS_MAIN = 0,      /**DNS main server address*/
-    TCPIP_ADAPTER_DNS_BACKUP,        /**DNS backup server address,for STA only,support soft-AP in future*/
-    TCPIP_ADAPTER_DNS_FALLBACK,      /**DNS fallback server address,for STA only*/
-    TCPIP_ADAPTER_DNS_MAX            /**Max DNS */
-} tcpip_adapter_dns_type_t;
+typedef enum  {
+    RPC_TCPIP_ADAPTER_DNS_MAIN = 0,      /**DNS main server address*/
+    RPC_TCPIP_ADAPTER_DNS_BACKUP,        /**DNS backup server address,for STA only,support soft-AP in future*/
+    RPC_TCPIP_ADAPTER_DNS_FALLBACK,      /**DNS fallback server address,for STA only*/
+    RPC_TCPIP_ADAPTER_DNS_MAX            /**Max DNS */
+} rpc_tcpip_adapter_dns_type_t;
 
 /*info of DNS server*/
 typedef struct {
     u32_t ipv4;
-} tcpip_adapter_dns_info_t;
+} rpc_tcpip_adapter_dns_info_t;
 
 /* status of DHCP client or DHCP server */
-typedef enum {
-    TCPIP_ADAPTER_DHCP_INIT = 0,    /**< DHCP client/server in initial state */
-    TCPIP_ADAPTER_DHCP_STARTED,     /**< DHCP client/server already been started */
-    TCPIP_ADAPTER_DHCP_STOPPED,     /**< DHCP client/server already been stopped */
-    TCPIP_ADAPTER_DHCP_STATUS_MAX
-} tcpip_adapter_dhcp_status_t;
+typedef enum  {
+    RPC_TCPIP_ADAPTER_DHCP_INIT = 0,    /**< DHCP client/server in initial state */
+    RPC_TCPIP_ADAPTER_DHCP_STARTED,     /**< DHCP client/server already been started */
+    RPC_TCPIP_ADAPTER_DHCP_STOPPED,     /**< DHCP client/server already been stopped */
+    RPC_TCPIP_ADAPTER_DHCP_STATUS_MAX
+} rpc_tcpip_adapter_dhcp_status_t;
 
 /* set the option mode for DHCP client or DHCP server */
-typedef enum {
-    TCPIP_ADAPTER_OP_START = 0,
-    TCPIP_ADAPTER_OP_SET,           /**< set option mode */
-    TCPIP_ADAPTER_OP_GET,           /**< get option mode */
-    TCPIP_ADAPTER_OP_MAX
-} tcpip_adapter_option_mode_t;
+typedef enum  {
+    RPC_TCPIP_ADAPTER_OP_START = 0,
+    RPC_TCPIP_ADAPTER_OP_SET,           /**< set option mode */
+    RPC_TCPIP_ADAPTER_OP_GET,           /**< get option mode */
+    RPC_TCPIP_ADAPTER_OP_MAX
+} rpc_tcpip_adapter_option_mode_t;
 
-typedef enum {
-    TCPIP_ADAPTER_DOMAIN_NAME_SERVER            = 6,    /**< domain name server */
-    TCPIP_ADAPTER_ROUTER_SOLICITATION_ADDRESS   = 32,   /**< solicitation router address */
-    TCPIP_ADAPTER_REQUESTED_IP_ADDRESS          = 50,   /**< request IP address pool */
-    TCPIP_ADAPTER_IP_ADDRESS_LEASE_TIME         = 51,   /**< request IP address lease time */
-    TCPIP_ADAPTER_IP_REQUEST_RETRY_TIME         = 52,   /**< request IP address retry counter */
-} tcpip_adapter_option_id_t;
+typedef enum  {
+    RPC_TCPIP_ADAPTER_DOMAIN_NAME_SERVER            = 6,    /**< domain name server */
+    RPC_TCPIP_ADAPTER_ROUTER_SOLICITATION_ADDRESS   = 32,   /**< solicitation router address */
+    RPC_TCPIP_ADAPTER_REQUESTED_IP_ADDRESS          = 50,   /**< request IP address pool */
+    RPC_TCPIP_ADAPTER_IP_ADDRESS_LEASE_TIME         = 51,   /**< request IP address lease time */
+    RPC_TCPIP_ADAPTER_IP_REQUEST_RETRY_TIME         = 52,   /**< request IP address retry counter */
+} rpc_tcpip_adapter_option_id_t;
 
 struct tcpip_adapter_api_msg_s;
 typedef int (*tcpip_adapter_api_fn)(struct tcpip_adapter_api_msg_s* msg);
@@ -191,15 +191,15 @@ typedef struct tcpip_adapter_api_msg_s {
     int type;  /**< The first field MUST be int */
     int ret;
     tcpip_adapter_api_fn api_fn;
-    tcpip_adapter_if_t tcpip_if;
-    tcpip_adapter_ip_info_t* ip_info;
+    rpc_tcpip_adapter_if_t tcpip_if;
+    rpc_tcpip_adapter_ip_info_t* ip_info;
     uint8_t* mac;
     void*    data;
 } tcpip_adapter_api_msg_t;
 
 typedef struct tcpip_adapter_dns_param_s {
-    tcpip_adapter_dns_type_t dns_type;
-    tcpip_adapter_dns_info_t* dns_info;
+    rpc_tcpip_adapter_dns_type_t dns_type;
+    rpc_tcpip_adapter_dns_info_t* dns_info;
 } tcpip_adapter_dns_param_t;
 
 #define TCPIP_ADAPTER_TRHEAD_SAFE 1
@@ -208,14 +208,14 @@ typedef struct tcpip_adapter_dns_param_s {
 
 #define TCPIP_ADAPTER_IPC_CALL(_if, _mac, _ip, _data, _fn) do {\
         tcpip_adapter_api_msg_t msg;\
-        if (tcpip_inited == false) {\
+        if (initialized == false) {\
             ESP_LOGE(TAG, "tcpip_adapter is not initialized!");\
             abort();\
         }\
         memset(&msg, 0, sizeof(msg));\
         msg.tcpip_if = (_if);\
         msg.mac      = (uint8_t*)(_mac);\
-        msg.ip_info  = (tcpip_adapter_ip_info_t*)(_ip);\
+        msg.ip_info  = (rpc_tcpip_adapter_ip_info_t*)(_ip);\
         msg.data     = (void*)(_data);\
         msg.api_fn   = (_fn);\
         if (TCPIP_ADAPTER_IPC_REMOTE == tcpip_adapter_ipc_check(&msg)) {\
@@ -235,7 +235,7 @@ typedef struct tcpip_adatper_ip_lost_timer_s {
 
     This will initialize TCPIP stack inside.
 */
-void tcpip_adapter_init(void);
+void new_tcpip_adapter_init(void);
 /**
  * @brief  Start the ethernet interface with specific MAC and IP
  *
@@ -246,7 +246,7 @@ void tcpip_adapter_init(void);
  *         ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
  *         ESP_ERR_NO_MEM
  */
-esp_err_t tcpip_adapter_eth_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info);
+esp_err_t new_tcpip_adapter_eth_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info);
 
 /**
  * @brief  Start the Wi-Fi station interface with specific MAC and IP
@@ -260,7 +260,7 @@ esp_err_t tcpip_adapter_eth_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info
  *         ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
  *         ESP_ERR_NO_MEM
  */
-esp_err_t tcpip_adapter_sta_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info);
+esp_err_t new_tcpip_adapter_sta_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info);
 
 /**
  * @brief  Start the Wi-Fi AP interface with specific MAC and IP
@@ -276,7 +276,7 @@ esp_err_t tcpip_adapter_sta_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info
  *         ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
  *         ESP_ERR_NO_MEM
  */
-esp_err_t tcpip_adapter_ap_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info);
+esp_err_t new_tcpip_adapter_ap_start(uint8_t *mac, rpc_tcpip_adapter_ip_info_t *ip_info);
 
 /**
  * @brief  Stop an interface
@@ -289,7 +289,7 @@ esp_err_t tcpip_adapter_ap_start(uint8_t *mac, tcpip_adapter_ip_info_t *ip_info)
  *         ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
  *         ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY
  */
-esp_err_t tcpip_adapter_stop(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_stop(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
  * @brief  Bring up an interface
@@ -301,7 +301,7 @@ esp_err_t tcpip_adapter_stop(tcpip_adapter_if_t tcpip_if);
  * @return ESP_OK
  *         ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY
  */
-esp_err_t tcpip_adapter_up(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_up(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
  * @brief  Shut down an interface
@@ -313,7 +313,7 @@ esp_err_t tcpip_adapter_up(tcpip_adapter_if_t tcpip_if);
  * @return ESP_OK
  *         ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY
  */
-esp_err_t tcpip_adapter_down(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_down(rpc_tcpip_adapter_if_t tcpip_if);
 /**
     @brief  Get interface's IP information
 
@@ -326,7 +326,7 @@ esp_err_t tcpip_adapter_down(tcpip_adapter_if_t tcpip_if);
     @return ESP_OK
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
 */
-esp_err_t tcpip_adapter_get_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_ip_info_t* ip_info);
+esp_err_t new_tcpip_adapter_get_ip_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_ip_info_t* ip_info);
 
 /**
     @brief  Set interface's IP information
@@ -342,16 +342,16 @@ esp_err_t tcpip_adapter_get_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_i
     @return ESP_OK
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
 */
-esp_err_t tcpip_adapter_set_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_ip_info_t* ip_info);
+esp_err_t new_tcpip_adapter_set_ip_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_ip_info_t* ip_info);
 
 /**
     @brief  Set DNS Server's information
 
     There has an DNS Server information copy in adapter library, set DNS Server for appointed interface and type.
 
-    1.In station mode, if dhcp client is enabled, then only the fallback DNS server can be set(TCPIP_ADAPTER_DNS_FALLBACK).
+    1.In station mode, if dhcp client is enabled, then only the fallback DNS server can be set(RPC_TCPIP_ADAPTER_DNS_FALLBACK).
      Fallback DNS server is only used if no DNS servers are set via DHCP.
-     If dhcp client is disabled, then need to set main/backup dns server(TCPIP_ADAPTER_DNS_MAIN, TCPIP_ADAPTER_DNS_BACKUP).
+     If dhcp client is disabled, then need to set main/backup dns server(RPC_TCPIP_ADAPTER_DNS_MAIN, RPC_TCPIP_ADAPTER_DNS_BACKUP).
 
     2.In soft-AP mode, the DNS Server's main dns server offered to the station is the IP address of soft-AP,
      if the application don't want to use the IP address of soft-AP, they can set the main dns server.
@@ -359,15 +359,15 @@ esp_err_t tcpip_adapter_set_ip_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_i
     This function is mainly used for setting static or Fallback DNS Server.
 
     @param[in]  tcpip_if: the interface which we want to set DNS Server information
-    @param[in]  type: the type of DNS Server,including TCPIP_ADAPTER_DNS_MAIN, TCPIP_ADAPTER_DNS_BACKUP, TCPIP_ADAPTER_DNS_FALLBACK
+    @param[in]  type: the type of DNS Server,including RPC_TCPIP_ADAPTER_DNS_MAIN, RPC_TCPIP_ADAPTER_DNS_BACKUP, RPC_TCPIP_ADAPTER_DNS_FALLBACK
     @param[in]  dns:  the DNS Server address to be set
 
     @return
         - ESP_OK on success
         - ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS invalid params
 */
-esp_err_t tcpip_adapter_set_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_dns_type_t type,
-                                     tcpip_adapter_dns_info_t* dns);
+esp_err_t new_tcpip_adapter_set_dns_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_dns_type_t type,
+                                     rpc_tcpip_adapter_dns_info_t* dns);
 
 /**
     @brief  Get DNS Server's information
@@ -377,15 +377,15 @@ esp_err_t tcpip_adapter_set_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_
     This function is mainly used for getting DNS Server information.
 
     @param[in]  tcpip_if: the interface which we want to get DNS Server information
-    @param[in]  type: the type of DNS Server,including TCPIP_ADAPTER_DNS_MAIN, TCPIP_ADAPTER_DNS_BACKUP, TCPIP_ADAPTER_DNS_FALLBACK
+    @param[in]  type: the type of DNS Server,including RPC_TCPIP_ADAPTER_DNS_MAIN, RPC_TCPIP_ADAPTER_DNS_BACKUP, RPC_TCPIP_ADAPTER_DNS_FALLBACK
     @param[in]  dns:  the DNS Server address to be get
 
     @return
         - ESP_OK on success
         - ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS invalid params
 */
-esp_err_t tcpip_adapter_get_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_dns_type_t type,
-                                     tcpip_adapter_dns_info_t* dns);
+esp_err_t new_tcpip_adapter_get_dns_info(rpc_tcpip_adapter_if_t tcpip_if, rpc_tcpip_adapter_dns_type_t type,
+                                     rpc_tcpip_adapter_dns_info_t* dns);
 
 /**
     @brief  create interface's linklocal IPv6 information
@@ -400,7 +400,7 @@ esp_err_t tcpip_adapter_get_dns_info(tcpip_adapter_if_t tcpip_if, tcpip_adapter_
     @return ESP_OK
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
 */
-esp_err_t tcpip_adapter_create_ip6_linklocal(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_create_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
     @brief  get interface's linkloacl IPv6 information
@@ -414,7 +414,7 @@ esp_err_t tcpip_adapter_create_ip6_linklocal(tcpip_adapter_if_t tcpip_if);
     @return ESP_OK
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
 */
-esp_err_t tcpip_adapter_get_ip6_linklocal(tcpip_adapter_if_t tcpip_if, ip6_addr_t* if_ip6);
+esp_err_t new_tcpip_adapter_get_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if, ip6_addr_t* if_ip6);
 
 /**
     @brief  Set or Get DHCP server's option
@@ -429,7 +429,7 @@ esp_err_t tcpip_adapter_get_ip6_linklocal(tcpip_adapter_if_t tcpip_if, ip6_addr_
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STOPPED
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STARTED
 */
-esp_err_t tcpip_adapter_dhcps_option(tcpip_adapter_option_mode_t opt_op, tcpip_adapter_option_id_t opt_id,
+esp_err_t new_tcpip_adapter_dhcps_option(rpc_tcpip_adapter_option_mode_t opt_op, rpc_tcpip_adapter_option_id_t opt_id,
                                      void* opt_val, uint32_t opt_len);
 
 /**
@@ -443,7 +443,7 @@ esp_err_t tcpip_adapter_dhcps_option(tcpip_adapter_option_mode_t opt_op, tcpip_a
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STARTED
 */
-esp_err_t tcpip_adapter_dhcps_start(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_dhcps_start(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
     @brief  Stop DHCP server
@@ -457,7 +457,7 @@ esp_err_t tcpip_adapter_dhcps_start(tcpip_adapter_if_t tcpip_if);
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STOPED
            ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY
 */
-esp_err_t tcpip_adapter_dhcps_stop(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_dhcps_stop(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
     @brief  Start DHCP client
@@ -471,7 +471,7 @@ esp_err_t tcpip_adapter_dhcps_stop(tcpip_adapter_if_t tcpip_if);
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STARTED
            ESP_ERR_TCPIP_ADAPTER_DHCPC_START_FAILED
 */
-esp_err_t tcpip_adapter_dhcpc_start(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_dhcpc_start(rpc_tcpip_adapter_if_t tcpip_if);
 
 /**
     @brief  Stop DHCP client
@@ -485,7 +485,7 @@ esp_err_t tcpip_adapter_dhcpc_start(tcpip_adapter_if_t tcpip_if);
            ESP_ERR_TCPIP_ADAPTER_DHCP_ALREADY_STOPED
            ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY
 */
-esp_err_t tcpip_adapter_dhcpc_stop(tcpip_adapter_if_t tcpip_if);
+esp_err_t new_tcpip_adapter_dhcpc_stop(rpc_tcpip_adapter_if_t tcpip_if);
 
 #define TCPIP_HOSTNAME_MAX_SIZE    32
 /**
@@ -498,7 +498,7 @@ esp_err_t tcpip_adapter_dhcpc_stop(tcpip_adapter_if_t tcpip_if);
            ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY:interface status error
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS:parameter error
 */
-esp_err_t tcpip_adapter_set_hostname(tcpip_adapter_if_t tcpip_if, const char* hostname);
+esp_err_t new_tcpip_adapter_set_hostname(rpc_tcpip_adapter_if_t tcpip_if, const char* hostname);
 
 /**
     @brief  Get the hostname from the interface
@@ -510,7 +510,7 @@ esp_err_t tcpip_adapter_set_hostname(tcpip_adapter_if_t tcpip_if, const char* ho
            ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY:interface status error
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS:parameter error
 */
-esp_err_t tcpip_adapter_get_hostname(tcpip_adapter_if_t tcpip_if, const char** hostname);
+esp_err_t new_tcpip_adapter_get_hostname(rpc_tcpip_adapter_if_t tcpip_if, const char** hostname);
 
 /**
     @brief  Get the LwIP netif* that is assigned to the interface
@@ -522,7 +522,7 @@ esp_err_t tcpip_adapter_get_hostname(tcpip_adapter_if_t tcpip_if, const char** h
            ESP_ERR_TCPIP_ADAPTER_IF_NOT_READY:interface status error
            ESP_ERR_TCPIP_ADAPTER_INVALID_PARAMS:parameter error
 */
-esp_err_t tcpip_adapter_get_netif(tcpip_adapter_if_t tcpip_if, void** netif);
+esp_err_t new_tcpip_adapter_get_netif(rpc_tcpip_adapter_if_t tcpip_if, void** netif);
 
 /**
     @brief  Test if supplied interface is up or down
@@ -532,11 +532,11 @@ esp_err_t tcpip_adapter_get_netif(tcpip_adapter_if_t tcpip_if, void** netif);
     @return  true:  tcpip_if is UP
             false: tcpip_if id DOWN
 */
-bool tcpip_adapter_is_netif_up(tcpip_adapter_if_t tcpip_if);
+bool new_tcpip_adapter_is_netif_up(rpc_tcpip_adapter_if_t tcpip_if);
 
-esp_err_t tcpip_adapter_get_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac);
+esp_err_t new_tcpip_adapter_get_mac(rpc_tcpip_adapter_if_t tcpip_if, uint8_t *mac);
 
-esp_err_t tcpip_adapter_set_mac(tcpip_adapter_if_t tcpip_if, uint8_t *mac);
+esp_err_t new_tcpip_adapter_set_mac(rpc_tcpip_adapter_if_t tcpip_if, uint8_t *mac);
 
 #ifdef __cplusplus
 }

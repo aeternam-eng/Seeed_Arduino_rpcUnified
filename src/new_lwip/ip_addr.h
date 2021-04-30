@@ -49,7 +49,7 @@ extern "C" {
 
 /** @ingroup ipaddr
     IP address types for use in ip_addr_t.type member.
-    @see tcp_new_ip_type(), udp_new_ip_type(), raw_new_ip_type().
+    @see new_tcp_new_ip_type(), udp_new_ip_type(), raw_new_ip_type().
 */
 enum lwip_ip_addr_type {
     /** IPv4 */
@@ -217,7 +217,7 @@ extern const ip_addr_t ip_addr_any_type;
             ip4_addr_debug_print_val(debug, *ip_2_ip4(&(ipaddr))); }}while(0)
 /** @ingroup ipaddr */
 #define ipaddr_ntoa(addr)   (((addr) == NULL) ? "NULL" : \
-                             ((IP_IS_V6(addr)) ? ip6addr_ntoa(ip_2_ip6(addr)) : ip4addr_ntoa(ip_2_ip4(addr))))
+                             ((IP_IS_V6(addr)) ? ip6addr_ntoa(ip_2_ip6(addr)) : new_ip4addr_ntoa(ip_2_ip4(addr))))
 /** @ingroup ipaddr */
 #define ipaddr_ntoa_r(addr, buf, buflen)   (((addr) == NULL) ? "NULL" : \
         ((IP_IS_V6(addr)) ? ip6addr_ntoa_r(ip_2_ip6(addr), buf, buflen) : ip4addr_ntoa_r(ip_2_ip4(addr), buf, buflen)))
