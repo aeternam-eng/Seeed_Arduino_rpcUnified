@@ -80,7 +80,7 @@ typedef void (*shutdown_handler_t)(void);
     This function allows you to register a handler that gets invoked before
     the application is restarted using esp_restart function.
 */
-esp_err_t esp_register_shutdown_handler(shutdown_handler_t handle);
+rpc_esp_err_t esp_register_shutdown_handler(shutdown_handler_t handle);
 
 /**
     @brief  Restart PRO and APP CPUs.
@@ -188,7 +188,7 @@ void esp_fill_random(void* buf, size_t len);
 
     @return ESP_OK on success
 */
-esp_err_t esp_base_mac_addr_set(uint8_t* mac);
+rpc_esp_err_t esp_base_mac_addr_set(uint8_t* mac);
 
 /**
     @brief  Return base MAC address which is set using esp_base_mac_addr_set.
@@ -198,7 +198,7 @@ esp_err_t esp_base_mac_addr_set(uint8_t* mac);
     @return ESP_OK on success
             ESP_ERR_INVALID_MAC base MAC address has not been set
 */
-esp_err_t esp_base_mac_addr_get(uint8_t* mac);
+rpc_esp_err_t esp_base_mac_addr_get(uint8_t* mac);
 
 /**
     @brief  Return base MAC address which was previously written to BLK3 of EFUSE.
@@ -214,7 +214,7 @@ esp_err_t esp_base_mac_addr_get(uint8_t* mac);
             ESP_ERR_INVALID_VERSION An invalid MAC version field was read from BLK3 of EFUSE
             ESP_ERR_INVALID_CRC An invalid MAC CRC was read from BLK3 of EFUSE
 */
-esp_err_t esp_efuse_mac_get_custom(uint8_t* mac);
+rpc_esp_err_t esp_efuse_mac_get_custom(uint8_t* mac);
 
 /**
     @brief  Return base MAC address which is factory-programmed by Espressif in BLK0 of EFUSE.
@@ -223,7 +223,7 @@ esp_err_t esp_efuse_mac_get_custom(uint8_t* mac);
 
     @return ESP_OK on success
 */
-esp_err_t esp_efuse_mac_get_default(uint8_t* mac);
+rpc_esp_err_t esp_efuse_mac_get_default(uint8_t* mac);
 
 /** @cond */
 /**
@@ -236,7 +236,7 @@ esp_err_t esp_efuse_mac_get_default(uint8_t* mac);
 
     @return ESP_OK on success
 */
-esp_err_t esp_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
+rpc_esp_err_t esp_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
 
 /**
     @brief  Read hardware MAC address.
@@ -247,7 +247,7 @@ esp_err_t esp_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
     @param  mac  hardware MAC address, length: 6 bytes.
     @return ESP_OK on success
 */
-esp_err_t system_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
+rpc_esp_err_t system_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
 /** @endcond */
 
 /**
@@ -262,7 +262,7 @@ esp_err_t system_efuse_read_mac(uint8_t* mac) __attribute__((deprecated));
 
     @return ESP_OK on success
 */
-esp_err_t esp_read_mac(uint8_t* mac, esp_mac_type_t type);
+rpc_esp_err_t esp_read_mac(uint8_t* mac, esp_mac_type_t type);
 
 /**
     @brief  Derive local MAC address from universal MAC address.
@@ -278,7 +278,7 @@ esp_err_t esp_read_mac(uint8_t* mac, esp_mac_type_t type);
 
     @return ESP_OK on success
 */
-esp_err_t esp_derive_local_mac(uint8_t* local_mac, const uint8_t* universal_mac);
+rpc_esp_err_t esp_derive_local_mac(uint8_t* local_mac, const uint8_t* universal_mac);
 
 /** @cond */
 /**

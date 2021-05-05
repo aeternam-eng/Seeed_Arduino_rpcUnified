@@ -108,8 +108,8 @@ typedef bool (*eth_phy_check_link_func)(void);
 typedef void (*eth_phy_check_init_func)(void);
 typedef eth_speed_mode_t (*eth_phy_get_speed_mode_func)(void);
 typedef eth_duplex_mode_t (*eth_phy_get_duplex_mode_func)(void);
-typedef esp_err_t (*eth_phy_func)(void);
-typedef esp_err_t (*eth_tcpip_input_func)(void* buffer, uint16_t len, void* eb);
+typedef rpc_esp_err_t (*eth_phy_func)(void);
+typedef rpc_esp_err_t (*eth_tcpip_input_func)(void* buffer, uint16_t len, void* eb);
 typedef void (*eth_gpio_config_func)(void);
 typedef bool (*eth_phy_get_partner_pause_enable_func)(void);
 typedef void (*eth_phy_power_enable_func)(bool enable);
@@ -147,7 +147,7 @@ typedef struct {
         - ESP_OK
         - ESP_FAIL
 */
-esp_err_t esp_eth_init(eth_config_t* config);
+rpc_esp_err_t esp_eth_init(eth_config_t* config);
 
 /**
     @brief  Deinit ethernet mac
@@ -157,7 +157,7 @@ esp_err_t esp_eth_init(eth_config_t* config);
         - ESP_FAIL
         - ESP_ERR_INVALID_STATE
 */
-esp_err_t esp_eth_deinit(void);
+rpc_esp_err_t esp_eth_deinit(void);
 
 /**
     @brief  Init Ethernet mac driver only
@@ -175,7 +175,7 @@ esp_err_t esp_eth_deinit(void);
         - ESP_OK
         - ESP_FAIL
 */
-esp_err_t esp_eth_init_internal(eth_config_t* config);
+rpc_esp_err_t esp_eth_init_internal(eth_config_t* config);
 
 /**
     @brief  Send packet from tcp/ip to mac
@@ -190,7 +190,7 @@ esp_err_t esp_eth_init_internal(eth_config_t* config);
         - ESP_OK
         - ESP_FAIL
 */
-esp_err_t esp_eth_tx(uint8_t* buf, uint16_t size);
+rpc_esp_err_t esp_eth_tx(uint8_t* buf, uint16_t size);
 
 /**
     @brief  Enable ethernet interface
@@ -201,7 +201,7 @@ esp_err_t esp_eth_tx(uint8_t* buf, uint16_t size);
         - ESP_OK
         - ESP_FAIL
 */
-esp_err_t esp_eth_enable(void);
+rpc_esp_err_t esp_eth_enable(void);
 
 /**
     @brief  Disable ethernet interface
@@ -212,7 +212,7 @@ esp_err_t esp_eth_enable(void);
         - ESP_OK
         - ESP_FAIL
 */
-esp_err_t esp_eth_disable(void);
+rpc_esp_err_t esp_eth_disable(void);
 
 /**
     @brief  Get mac addr
@@ -257,7 +257,7 @@ uint16_t esp_eth_smi_read(uint32_t reg_num);
 
     @return ESP_OK if desired value matches, ESP_ERR_TIMEOUT if timed out.
 */
-esp_err_t esp_eth_smi_wait_value(uint32_t reg_num, uint16_t value, uint16_t value_mask, int timeout_ms);
+rpc_esp_err_t esp_eth_smi_wait_value(uint32_t reg_num, uint16_t value, uint16_t value_mask, int timeout_ms);
 
 /**
     @brief Continuously read a PHY register over SMI interface, wait until the register has all bits in a mask set.
@@ -270,7 +270,7 @@ esp_err_t esp_eth_smi_wait_value(uint32_t reg_num, uint16_t value, uint16_t valu
 
     @return ESP_OK if desired value matches, ESP_ERR_TIMEOUT if timed out.
 */
-static inline esp_err_t esp_eth_smi_wait_set(uint32_t reg_num, uint16_t value_mask, int timeout_ms) {
+static inline rpc_esp_err_t esp_eth_smi_wait_set(uint32_t reg_num, uint16_t value_mask, int timeout_ms) {
     return esp_eth_smi_wait_value(reg_num, value_mask, value_mask, timeout_ms);
 }
 
@@ -295,7 +295,7 @@ void esp_eth_free_rx_buf(void* buf);
       - ESP_OK: succeed
       - ESP_ERR_INVALID_MAC: invalid mac address
 */
-esp_err_t esp_eth_set_mac(const uint8_t mac[6]);
+rpc_esp_err_t esp_eth_set_mac(const uint8_t mac[6]);
 
 /**
     @brief Get Ethernet link speed

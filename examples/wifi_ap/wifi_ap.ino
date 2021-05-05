@@ -4,7 +4,7 @@
 const char *ssid = "TE_TEST";
 const char *password = "123456789";
 
-esp_err_t wifi_event_callback(void *ctx, system_event_t *event)
+rpc_esp_err_t wifi_event_callback(void *ctx, rpc_system_event_t *event)
 {
     Serial.printf("[WiFi-event] event: %d\n\r", event->event_id);
     
@@ -13,76 +13,76 @@ esp_err_t wifi_event_callback(void *ctx, system_event_t *event)
     case SYSTEM_EVENT_WIFI_READY:
         Serial.printf("WiFi interface ready\n\r");
         break;
-    case SYSTEM_EVENT_SCAN_DONE:
+    case RPC_SYSTEM_EVENT_SCAN_DONE:
         Serial.printf("Completed scan for access points\n\r");
         break;
-    case SYSTEM_EVENT_STA_START:
+    case RPC_SYSTEM_EVENT_STA_START:
         Serial.printf("WiFi client started\n\r");
         break;
-    case SYSTEM_EVENT_STA_STOP:
+    case RPC_SYSTEM_EVENT_STA_STOP:
         Serial.printf("WiFi clients stopped\n\r");
         break;
-    case SYSTEM_EVENT_STA_CONNECTED:
+    case RPC_SYSTEM_EVENT_STA_CONNECTED:
         Serial.printf("Connected to access point\n\r");
         break;
-    case SYSTEM_EVENT_STA_DISCONNECTED:
+    case RPC_SYSTEM_EVENT_STA_DISCONNECTED:
         Serial.printf("Disconnected from WiFi access point\n\r");
         break;
-    case SYSTEM_EVENT_STA_AUTHMODE_CHANGE:
+    case RPC_SYSTEM_EVENT_STA_AUTHMODE_CHANGE:
         Serial.printf("Authentication mode of access point has changed\n\r");
         break;
-    case SYSTEM_EVENT_STA_GOT_IP:
+    case RPC_SYSTEM_EVENT_STA_GOT_IP:
         Serial.printf("Obtained IP address: \n\r");
         break;
-    case SYSTEM_EVENT_STA_LOST_IP:
+    case RPC_SYSTEM_EVENT_STA_LOST_IP:
         Serial.printf("Lost IP address and IP address is reset to 0\n\r");
         break;
-    case SYSTEM_EVENT_STA_WPS_ER_SUCCESS:
+    case RPC_SYSTEM_EVENT_STA_WPS_ER_SUCCESS:
         Serial.printf("WiFi Protected Setup (WPS): succeeded in enrollee mode\n\r");
         break;
-    case SYSTEM_EVENT_STA_WPS_ER_FAILED:
+    case RPC_SYSTEM_EVENT_STA_WPS_ER_FAILED:
         Serial.printf("WiFi Protected Setup (WPS): failed in enrollee mode\n\r");
         break;
-    case SYSTEM_EVENT_STA_WPS_ER_TIMEOUT:
+    case RPC_SYSTEM_EVENT_STA_WPS_ER_TIMEOUT:
         Serial.printf("WiFi Protected Setup (WPS): timeout in enrollee mode\n\r");
         break;
-    case SYSTEM_EVENT_STA_WPS_ER_PIN:
+    case RPC_SYSTEM_EVENT_STA_WPS_ER_PIN:
         Serial.printf("WiFi Protected Setup (WPS): pin code in enrollee mode\n\r");
         break;
-    case SYSTEM_EVENT_AP_START:
+    case RPC_SYSTEM_EVENT_AP_START:
         Serial.printf("WiFi access point started\n\r");
         break;
-    case SYSTEM_EVENT_AP_STOP:
+    case RPC_SYSTEM_EVENT_AP_STOP:
         Serial.printf("WiFi access point  stopped\n\r");
         break;
-    case SYSTEM_EVENT_AP_STACONNECTED:
+    case RPC_SYSTEM_EVENT_AP_STACONNECTED:
         Serial.printf("Client connected\n\r");
         break;
-    case SYSTEM_EVENT_AP_STADISCONNECTED:
+    case RPC_SYSTEM_EVENT_AP_STADISCONNECTED:
         Serial.printf("Client disconnected\n\r");
         break;
-    case SYSTEM_EVENT_AP_STAIPASSIGNED:
+    case RPC_SYSTEM_EVENT_AP_STAIPASSIGNED:
         Serial.printf("Assigned IP address to client\n\r");
         break;
-    case SYSTEM_EVENT_AP_PROBEREQRECVED:
+    case RPC_SYSTEM_EVENT_AP_PROBEREQRECVED:
         Serial.printf("Received probe request\n\r");
         break;
-    case SYSTEM_EVENT_GOT_IP6:
+    case RPC_SYSTEM_EVENT_GOT_IP6:
         Serial.printf("IPv6 is preferred\n\r");
         break;
-    case SYSTEM_EVENT_ETH_START:
+    case RPC_SYSTEM_EVENT_ETH_START:
         Serial.printf("Ethernet started\n\r");
         break;
-    case SYSTEM_EVENT_ETH_STOP:
+    case RPC_SYSTEM_EVENT_ETH_STOP:
         Serial.printf("Ethernet stopped\n\r");
         break;
-    case SYSTEM_EVENT_ETH_CONNECTED:
+    case RPC_SYSTEM_EVENT_ETH_CONNECTED:
         Serial.printf("Ethernet connected\n\r");
         break;
-    case SYSTEM_EVENT_ETH_DISCONNECTED:
+    case RPC_SYSTEM_EVENT_ETH_DISCONNECTED:
         Serial.printf("Ethernet disconnected\n\r");
         break;
-    case SYSTEM_EVENT_ETH_GOT_IP:
+    case RPC_SYSTEM_EVENT_ETH_GOT_IP:
         Serial.printf("Obtained IP address\n\r");
         break;
     default:

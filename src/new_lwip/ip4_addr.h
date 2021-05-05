@@ -34,8 +34,8 @@
     Author: Adam Dunkels <adam@sics.se>
 
 */
-#ifndef LWIP_HDR_IP4_ADDR_H
-#define LWIP_HDR_IP4_ADDR_H
+#ifndef NEWLWIP_HDR_IP4_ADDR_H
+#define NEWLWIP_HDR_IP4_ADDR_H
 
 #include "opt.h"
 #include "def.h"
@@ -46,15 +46,15 @@
 extern "C" {
 #endif
 
-/** This is the aligned version of ip4_addr_t,
+/** This is the aligned version of new_ip4_addr_t,
     used as local variable, on the stack, etc. */
-struct ip4_addr {
+struct new_ip4_addr {
     u32_t addr;
 };
 
-/** ip4_addr_t uses a struct for convenience only, so that the same defines can
-    operate both on ip4_addr_t as well as on ip4_addr_p_t. */
-typedef struct ip4_addr ip4_addr_t;
+/** new_ip4_addr_t uses a struct for convenience only, so that the same defines can
+    operate both on new_ip4_addr_t as well as on ip4_addr_p_t. */
+typedef struct new_ip4_addr new_ip4_addr_t;
 
 /**
     struct ipaddr2 is used in the definition of the ARP packet format in
@@ -64,7 +64,7 @@ typedef struct ip4_addr ip4_addr_t;
 #  include "arch/bpstruct.h"
 #endif
 PACK_STRUCT_BEGIN
-struct ip4_addr2 {
+struct new_ip4_addr2 {
     PACK_STRUCT_FIELD(u16_t addrw[2]);
 } PACK_STRUCT_STRUCT;
 PACK_STRUCT_END
@@ -212,11 +212,11 @@ u8_t ip4_addr_netmask_valid(u32_t netmask);
 /** For backwards compatibility */
 #define ip_ntoa(ipaddr)  ipaddr_ntoa(ipaddr)
 
-u32_t ipaddr_addr(const char* cp);
-int ip4addr_aton(const char* cp, ip4_addr_t* addr);
+u32_t new_ipaddr_addr(const char* cp);
+int new_ip4addr_aton(const char* cp, new_ip4_addr_t* addr);
 /** returns ptr to static buffer; not reentrant! */
-char* ip4addr_ntoa(const ip4_addr_t* addr);
-char* ip4addr_ntoa_r(const ip4_addr_t* addr, char* buf, int buflen);
+char* new_ip4addr_ntoa(const new_ip4_addr_t* addr);
+char* new_ip4addr_ntoa_r(const new_ip4_addr_t* addr, char* buf, int buflen);
 
 #ifdef __cplusplus
 }

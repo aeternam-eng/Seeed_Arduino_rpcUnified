@@ -16,8 +16,8 @@
 
 /** helper struct for gethostbyname_r to access the char* buffer */
 struct gethostbyname_r_helper {
-  ip_addr_t *addr_list[2];
-  ip_addr_t addr;
+  new_ip_addr_t *addr_list[2];
+  new_ip_addr_t addr;
   char *aliases;
 };
 
@@ -39,18 +39,18 @@ int h_errno;
 #define HOSTENT_STORAGE static
 #endif /* LWIP_DNS_API_STATIC_HOSTENT */
 
-err_t netconn_gethostbyname(const char * name, ip_addr_t * addr)
+err_t netconn_gethostbyname(const char * name, new_ip_addr_t * addr)
 {
     FUNC_ENTRY;
-    binary_t ip_addr;
+    binary_t new_ip_addr;
 
-    err_t ret = rpc_netconn_gethostbyname(name, &ip_addr);
+    err_t ret = rpc_netconn_gethostbyname(name, &new_ip_addr);
 
-    memcpy(addr, ip_addr.data, sizeof(ip_addr_t));
+    memcpy(addr, new_ip_addr.data, sizeof(new_ip_addr_t));
 
-    if(ip_addr.data != NULL)
+    if(new_ip_addr.data != NULL)
     {
-        erpc_free(ip_addr.data);
+        erpc_free(new_ip_addr.data);
     }
     return ret;
 }
@@ -66,13 +66,13 @@ err_t netconn_gethostbyname(const char * name, ip_addr_t * addr)
 struct hostent *lwip_gethostbyname(const char *name)
 {
   err_t err;
-  ip_addr_t addr;
+  new_ip_addr_t addr;
 
   /* buffer variables for lwip_gethostbyname() */
   HOSTENT_STORAGE struct hostent s_hostent;
   HOSTENT_STORAGE char *s_aliases;
-  HOSTENT_STORAGE ip_addr_t s_hostent_addr;
-  HOSTENT_STORAGE ip_addr_t *s_phostent_addr[2];
+  HOSTENT_STORAGE new_ip_addr_t s_hostent_addr;
+  HOSTENT_STORAGE new_ip_addr_t *s_phostent_addr[2];
   HOSTENT_STORAGE char s_hostname[DNS_MAX_NAME_LENGTH + 1];
 
   /* query host IP address */
@@ -92,7 +92,7 @@ struct hostent *lwip_gethostbyname(const char *name)
   s_aliases = NULL;
   s_hostent.h_aliases = &s_aliases;
   s_hostent.h_addrtype = AF_INET;
-  s_hostent.h_length = sizeof(ip_addr_t);
+  s_hostent.h_length = sizeof(new_ip_addr_t);
   s_hostent.h_addr_list = (char**)&s_phostent_addr;
 
 #if DNS_DEBUG
@@ -107,7 +107,7 @@ struct hostent *lwip_gethostbyname(const char *name)
     u8_t idx;
     for (idx=0; s_hostent.h_addr_list[idx]; idx++) {
       LWIP_DEBUGF(DNS_DEBUG, ("hostent.h_addr_list[%i]   == %p\n", idx, s_hostent.h_addr_list[idx]));
-      LWIP_DEBUGF(DNS_DEBUG, ("hostent.h_addr_list[%i]-> == %s\n", idx, ipaddr_ntoa((ip_addr_t*)s_hostent.h_addr_list[idx])));
+      LWIP_DEBUGF(DNS_DEBUG, ("hostent.h_addr_list[%i]-> == %s\n", idx, ipaddr_ntoa((new_ip_addr_t*)s_hostent.h_addr_list[idx])));
     }
   }
 #endif /* DNS_DEBUG */

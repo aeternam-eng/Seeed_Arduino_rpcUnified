@@ -29,7 +29,7 @@ extern "C" {
     };
 */
 
-typedef int32_t esp_err_t;
+typedef int32_t rpc_esp_err_t;
 
 /* Definitions for error constants. */
 #define ESP_OK          0       /*!< esp_err_t value indicating success (no error) */
@@ -66,7 +66,7 @@ typedef int32_t esp_err_t;
     @param code esp_err_t error code
     @return string error message
 */
-const char* esp_err_to_name(esp_err_t code);
+const char* esp_err_to_name(rpc_esp_err_t code);
 
 /**
     @brief Returns string for esp_err_t and system error codes
@@ -84,14 +84,14 @@ const char* esp_err_to_name(esp_err_t code);
     @param buflen Size of buffer buf. At most buflen bytes are written into the buf buffer (including the terminating null byte).
     @return buf containing the string error message
 */
-const char* esp_err_to_name_r(esp_err_t code, char* buf, size_t buflen);
+const char* esp_err_to_name_r(rpc_esp_err_t code, char* buf, size_t buflen);
 
 /** @cond */
-void _esp_error_check_failed(esp_err_t rc, const char* file, int line, const char* function,
+void _esp_error_check_failed(rpc_esp_err_t rc, const char* file, int line, const char* function,
                              const char* expression) __attribute__((noreturn));
 
 /** @cond */
-void _esp_error_check_failed_without_abort(esp_err_t rc, const char* file, int line, const char* function,
+void _esp_error_check_failed_without_abort(rpc_esp_err_t rc, const char* file, int line, const char* function,
         const char* expression);
 
 #ifndef __ASSERT_FUNC
@@ -127,7 +127,7 @@ void _esp_error_check_failed_without_abort(esp_err_t rc, const char* file, int l
     } while(0);
 #else
 #define ESP_ERROR_CHECK(x) do {                                         \
-        esp_err_t __err_rc = (x);                                       \
+        rpc_esp_err_t __err_rc = (x);                                       \
         if (__err_rc != ESP_OK) {                                       \
             _esp_error_check_failed(__err_rc, __FILE__, __LINE__,       \
                                     __ASSERT_FUNC, #x);                 \

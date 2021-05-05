@@ -87,10 +87,10 @@ struct local_hostlist_entry {
 #endif /* DNS_LOCAL_HOSTLIST */
 
 #if LWIP_IPV4
-extern const ip_addr_t dns_mquery_v4group;
+extern const new_ip_addr_t dns_mquery_v4group;
 #endif /* LWIP_IPV4 */
 #if LWIP_IPV6
-extern const ip_addr_t dns_mquery_v6group;
+extern const new_ip_addr_t dns_mquery_v6group;
 #endif /* LWIP_IPV6 */
 
 /** Callback which is invoked when a hostname is found.
@@ -100,19 +100,19 @@ extern const ip_addr_t dns_mquery_v6group;
           or NULL if the name could not be found (or on any other error).
     @param callback_arg a user-specified callback argument passed to dns_gethostbyname
 */
-typedef void (*dns_found_callback)(const char* name, const ip_addr_t* ipaddr, void* callback_arg);
+typedef void (*dns_found_callback)(const char* name, const new_ip_addr_t* ipaddr, void* callback_arg);
 
 void             dns_init(void);
 void             dns_tmr(void);
-void             dns_setserver(u8_t numdns, const ip_addr_t* dnsserver);
+void             dns_setserver(u8_t numdns, const new_ip_addr_t* dnsserver);
 #if ESP_DNS
-ip_addr_t       dns_getserver(u8_t numdns);
+new_ip_addr_t       dns_getserver(u8_t numdns);
 #else
 const ip_addr_t* dns_getserver(u8_t numdns);
 #endif
-err_t            new_dns_gethostbyname(const char* hostname, ip_addr_t* addr,
+err_t            new_dns_gethostbyname(const char* hostname, new_ip_addr_t* addr,
                                    dns_found_callback found, void* callback_arg);
-err_t            new_dns_gethostbyname_addrtype(const char* hostname, ip_addr_t* addr,
+err_t            new_dns_gethostbyname_addrtype(const char* hostname, new_ip_addr_t* addr,
         dns_found_callback found, void* callback_arg,
         u8_t dns_addrtype);
 #if ESP_DNS

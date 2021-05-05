@@ -26,14 +26,14 @@
  * - ERR_ARG: dns client not initialized or invalid hostname
  *
  * @param hostname the hostname that is to be queried
- * @param addr pointer to a ip_addr_t where to store the address if it is already
+ * @param addr pointer to a new_ip_addr_t where to store the address if it is already
  *             cached in the dns_table (only valid if ERR_OK is returned!)
  * @param found a callback function to be called on success, failure or timeout (only if
  *              ERR_INPROGRESS is returned!)
  * @param callback_arg argument to pass to the callback function
  * @return a err_t return code.
  */
-err_t new_dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_callback found,
+err_t new_dns_gethostbyname(const char *hostname, new_ip_addr_t *addr, dns_found_callback found,
                         void *callback_arg)
 {
   return new_dns_gethostbyname_addrtype(hostname, addr, found, callback_arg, LWIP_DNS_ADDRTYPE_DEFAULT);
@@ -43,7 +43,7 @@ err_t new_dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_cal
  * @ingroup dns
  * Like dns_gethostbyname, but returned address type can be controlled:
  * @param hostname the hostname that is to be queried
- * @param addr pointer to a ip_addr_t where to store the address if it is already
+ * @param addr pointer to a new_ip_addr_t where to store the address if it is already
  *             cached in the dns_table (only valid if ERR_OK is returned!)
  * @param found a callback function to be called on success, failure or timeout (only if
  *              ERR_INPROGRESS is returned!)
@@ -53,7 +53,7 @@ err_t new_dns_gethostbyname(const char *hostname, ip_addr_t *addr, dns_found_cal
  *                     - LWIP_DNS_ADDRTYPE_IPV4: try to resolve IPv4 only
  *                     - LWIP_DNS_ADDRTYPE_IPV6: try to resolve IPv6 only
  */
-err_t new_dns_gethostbyname_addrtype(const char *hostname, ip_addr_t *addr, dns_found_callback found,
+err_t new_dns_gethostbyname_addrtype(const char *hostname, new_ip_addr_t *addr, dns_found_callback found,
                                  void *callback_arg, u8_t dns_addrtype)
 {
   FUNC_ENTRY;
@@ -76,7 +76,7 @@ err_t new_dns_gethostbyname_addrtype(const char *hostname, ip_addr_t *addr, dns_
     b_callback_arg.dataLength = 4;
   }
   err_t ret = rpc_dns_gethostbyname_addrtype(hostname, &b_addr, (uint32_t)found, &b_callback_arg, dns_addrtype);
-  memcpy(addr, b_addr.data, sizeof(ip_addr_t));
+  memcpy(addr, b_addr.data, sizeof(new_ip_addr_t));
   if(data != NULL)
   {
     erpc_free(data);

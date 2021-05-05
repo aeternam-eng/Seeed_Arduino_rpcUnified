@@ -54,9 +54,9 @@ void Thread::start(void *arg)
     // higher priority than the current thread, and the new thread calls getCurrenThread(),
     // which will scan the linked list.
     taskENTER_CRITICAL(&(_muxthing));
-    if (pdPASS == xTaskCreateUniversal(threadEntryPointStub, (m_name ? m_name : "task"),
+    if (pdPASS == xTaskCreate(threadEntryPointStub, (m_name ? m_name : "task"),
                               ((m_stackSize + sizeof(uint32_t) - 1) / sizeof(uint32_t)), // Round up number of words.
-                              this, m_priority, &m_task, CONFIG_ARDUINO_RUNNING_CORE))
+                              this, m_priority, &m_task))
     {
         // Link in this thread to the list.
         if (NULL != s_first)

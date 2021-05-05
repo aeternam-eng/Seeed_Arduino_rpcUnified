@@ -30,10 +30,10 @@ typedef struct rpc_mdns_result_basic_s {
     uint16_t addr_count;
 } rpc_mdns_result_basic_s;
 
-esp_err_t mdns_init(void)
+rpc_esp_err_t mdns_init(void)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_init();
+    rpc_esp_err_t ret = rpc_mdns_init();
     FUNC_EXIT;
 
     return ret;
@@ -42,31 +42,31 @@ esp_err_t mdns_init(void)
 void mdns_free(void)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_free();
+    rpc_esp_err_t ret = rpc_mdns_free();
     FUNC_EXIT;
 }
 
-esp_err_t mdns_hostname_set(const char * hostname)
+rpc_esp_err_t mdns_hostname_set(const char * hostname)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_hostname_set(hostname);
+    rpc_esp_err_t ret = rpc_mdns_hostname_set(hostname);
     FUNC_EXIT;
 
     return ret;
 }
 
-esp_err_t mdns_instance_name_set(const char * instance_name)
+rpc_esp_err_t mdns_instance_name_set(const char * instance_name)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_instance_name_set(instance_name);
+    rpc_esp_err_t ret = rpc_mdns_instance_name_set(instance_name);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t mdns_service_add(const char * instance_name, const char * service_type, const char * proto, uint16_t port, mdns_txt_item_t txt[], size_t num_items)
+rpc_esp_err_t mdns_service_add(const char * instance_name, const char * service_type, const char * proto, uint16_t port, mdns_txt_item_t txt[], size_t num_items)
 {
     int count = 0;
-    esp_err_t ret;
+    rpc_esp_err_t ret;
 
     FUNC_ENTRY;
 
@@ -85,26 +85,26 @@ esp_err_t mdns_service_add(const char * instance_name, const char * service_type
     return ret;
 }
 
-esp_err_t mdns_service_remove(const char * service_type, const char * proto)
+rpc_esp_err_t mdns_service_remove(const char * service_type, const char * proto)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_service_remove(service_type,proto);
+    rpc_esp_err_t ret = rpc_mdns_service_remove(service_type,proto);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t mdns_service_txt_item_set(const char * service_type, const char * proto, const char * key, const char * value)
+rpc_esp_err_t mdns_service_txt_item_set(const char * service_type, const char * proto, const char * key, const char * value)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_service_txt_item_set(service_type,proto,key,value);
+    rpc_esp_err_t ret = rpc_mdns_service_txt_item_set(service_type,proto,key,value);
     FUNC_EXIT;
     return ret;
 }
 
-esp_err_t mdns_service_instance_name_set(const char * service, const char * proto, const char * instance)
+rpc_esp_err_t mdns_service_instance_name_set(const char * service, const char * proto, const char * instance)
 {
     FUNC_ENTRY;
-    esp_err_t ret = rpc_mdns_service_instance_name_set(service,proto,instance);
+    rpc_esp_err_t ret = rpc_mdns_service_instance_name_set(service,proto,instance);
     FUNC_EXIT;
     return ret;
 }
@@ -143,7 +143,7 @@ void mdns_query_results_free(mdns_result_t * results)
     FUNC_EXIT;
 }
 
-esp_err_t mdns_query_ptr(const char * service_type, const char * proto, uint32_t timeout, size_t max_results, mdns_result_t ** results)
+rpc_esp_err_t mdns_query_ptr(const char * service_type, const char * proto, uint32_t timeout, size_t max_results, mdns_result_t ** results)
 {
     int32_t result_total;
     mdns_result_t * result;
@@ -152,7 +152,7 @@ esp_err_t mdns_query_ptr(const char * service_type, const char * proto, uint32_t
     binary_t binary_result;
     binary_t binary_txt;
     binary_t binary_addr;
-    esp_err_t ret;
+    rpc_esp_err_t ret;
     int count_result = 0;
     int count_txt = 0;
     int count_addr = 0;
@@ -225,7 +225,7 @@ esp_err_t mdns_query_ptr(const char * service_type, const char * proto, uint32_t
                         if(ret == ESP_OK){
                             mdns_addr = (mdns_ip_addr_t *)erpc_malloc(sizeof(mdns_ip_addr_t));
 
-                            mdns_addr->addr.type = IPADDR_TYPE_V4;
+                            mdns_addr->addr.type = NEW_IPADDR_TYPE_V4;
                             memcpy(&mdns_addr->addr.u_addr.ip4.addr,binary_addr.data,sizeof(u32_t));
                             
                             mdns_addr->next = result->addr;
@@ -251,13 +251,13 @@ esp_err_t mdns_query_ptr(const char * service_type, const char * proto, uint32_t
     return ret;
 }
 
-esp_err_t mdns_query_a(const char * host_name, uint32_t timeout, ip4_addr_t * addr)
+rpc_esp_err_t mdns_query_a(const char * host_name, uint32_t timeout, new_ip4_addr_t * addr)
 {
     binary_t binary_addr;
 
     FUNC_ENTRY;
 
-    esp_err_t ret = rpc_mdns_query_a(host_name,timeout,&binary_addr);
+    rpc_esp_err_t ret = rpc_mdns_query_a(host_name,timeout,&binary_addr);
     if(ret == ESP_OK){
         memcpy(&addr->addr,binary_addr.data,sizeof(u32_t));
     }
@@ -271,7 +271,7 @@ esp_err_t mdns_query_a(const char * host_name, uint32_t timeout, ip4_addr_t * ad
     return ret;
 }
 
-esp_err_t mdns_handle_system_event(void *ctx, system_event_t *event)
+rpc_esp_err_t mdns_handle_system_event(void *ctx, rpc_system_event_t *event)
 {
     return ESP_OK;
 }

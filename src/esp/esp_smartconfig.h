@@ -42,7 +42,7 @@ typedef enum {
 
     @param  status  Status of SmartConfig:
        - SC_STATUS_GETTING_SSID_PSWD : pdata is a pointer of smartconfig_type_t, means config type.
-       - SC_STATUS_LINK : pdata is a pointer to wifi_config_t.
+       - SC_STATUS_LINK : pdata is a pointer to rpc_wifi_config_t.
        - SC_STATUS_LINK_OVER : pdata is a pointer of phone's IP address(4 bytes) if pdata unequal NULL.
        - otherwise : parameter void *pdata is NULL.
     @param  pdata  According to the different status have different values.
@@ -73,7 +73,7 @@ const char* esp_smartconfig_get_version(void);
         - ESP_OK: succeed
         - others: fail
 */
-esp_err_t esp_smartconfig_start(sc_callback_t cb, ...);
+rpc_esp_err_t esp_smartconfig_start(sc_callback_t cb, ...);
 
 /**
     @brief     Stop SmartConfig, free the buffer taken by esp_smartconfig_start.
@@ -85,7 +85,7 @@ esp_err_t esp_smartconfig_start(sc_callback_t cb, ...);
         - ESP_OK: succeed
         - others: fail
 */
-esp_err_t esp_smartconfig_stop(void);
+rpc_esp_err_t esp_smartconfig_stop(void);
 
 /**
     @brief     Set timeout of SmartConfig process.
@@ -98,7 +98,7 @@ esp_err_t esp_smartconfig_stop(void);
         - ESP_OK: succeed
         - others: fail
 */
-esp_err_t esp_esptouch_set_timeout(uint8_t time_s);
+rpc_esp_err_t esp_esptouch_set_timeout(uint8_t time_s);
 
 /**
     @brief     Set protocol type of SmartConfig.
@@ -112,7 +112,7 @@ esp_err_t esp_esptouch_set_timeout(uint8_t time_s);
         - ESP_OK: succeed
         - others: fail
 */
-esp_err_t esp_smartconfig_set_type(smartconfig_type_t type);
+rpc_esp_err_t esp_smartconfig_set_type(smartconfig_type_t type);
 
 /**
     @brief     Set mode of SmartConfig. default normal mode.
@@ -127,7 +127,7 @@ esp_err_t esp_smartconfig_set_type(smartconfig_type_t type);
         - ESP_OK: succeed
         - others: fail
 */
-esp_err_t esp_smartconfig_fast_mode(bool enable);
+rpc_esp_err_t esp_smartconfig_fast_mode(bool enable);
 
 #ifdef __cplusplus
 }

@@ -118,7 +118,7 @@ erpc_status_t rpc_wifi_callback_service::rpc_wifi_event_callback_shim(Codec * co
     err = codec->getStatus();
     if (!err)
     {
-        system_event_t *event_data = (system_event_t *)event->data;
+        rpc_system_event_t *event_data = (rpc_system_event_t *)event->data;
         // Invoke the actual served function.
 #if ERPC_NESTED_CALLS_DETECTION
         nestingDetection = true;

@@ -80,9 +80,9 @@ u16_t inet_chksum(const void *dataptr, u16_t len);
 
 //#if LWIP_IPV4
 //u16_t inet_chksum_pseudo(struct pbuf *p, u8_t proto, u16_t proto_len,
-//       const ip4_addr_t *src, const ip4_addr_t *dest);
+//       const new_ip4_addr_t *src, const new_ip4_addr_t *dest);
 //u16_t inet_chksum_pseudo_partial(struct pbuf *p, u8_t proto,
-//       u16_t proto_len, u16_t chksum_len, const ip4_addr_t *src, const ip4_addr_t *dest);
+//       u16_t proto_len, u16_t chksum_len, const new_ip4_addr_t *src, const new_ip4_addr_t *dest);
 //#endif /* LWIP_IPV4 */
 
 //#if LWIP_IPV6
@@ -94,9 +94,9 @@ u16_t inet_chksum(const void *dataptr, u16_t len);
 
 
 //u16_t ip_chksum_pseudo(struct pbuf *p, u8_t proto, u16_t proto_len,
-//       const ip_addr_t *src, const ip_addr_t *dest);
+//       const new_ip_addr_t *src, const new_ip_addr_t *dest);
 //u16_t ip_chksum_pseudo_partial(struct pbuf *p, u8_t proto, u16_t proto_len,
-//       u16_t chksum_len, const ip_addr_t *src, const ip_addr_t *dest);
+//       u16_t chksum_len, const new_ip_addr_t *src, const new_ip_addr_t *dest);
 
 #ifdef __cplusplus
 }

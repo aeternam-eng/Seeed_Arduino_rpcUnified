@@ -44,7 +44,7 @@
 extern "C" {
 #endif
 
-/** This is the packed version of ip4_addr_t,
+/** This is the packed version of new_ip4_addr_t,
     used in network headers that are itself packed */
 #ifdef PACK_STRUCT_USE_INCLUDES
 #  include "arch/bpstruct.h"

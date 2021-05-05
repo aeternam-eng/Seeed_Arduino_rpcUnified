@@ -134,14 +134,14 @@ extern const struct in6_addr in6addr_any;
 
 #define inet_addr_from_ip4addr(target_inaddr, source_ipaddr) ((target_inaddr)->s_addr = ip4_addr_get_u32(source_ipaddr))
 #define inet_addr_to_ip4addr(target_ipaddr, source_inaddr)   (ip4_addr_set_u32(target_ipaddr, (source_inaddr)->s_addr))
-/* ATTENTION: the next define only works because both s_addr and ip4_addr_t are an u32_t effectively! */
+/* ATTENTION: the next define only works because both s_addr and new_ip4_addr_t are an u32_t effectively! */
 #define inet_addr_to_ip4addr_p(target_ip4addr_p, source_inaddr)   ((target_ip4addr_p) = (ip4_addr_t*)&((source_inaddr)->s_addr))
 
 /* directly map this to the lwip internal functions */
-#define inet_addr(cp)                   ipaddr_addr(cp)
-#define inet_aton(cp, addr)             ip4addr_aton(cp, (ip4_addr_t*)addr)
-#define inet_ntoa(addr)                 ip4addr_ntoa((const ip4_addr_t*)&(addr))
-#define inet_ntoa_r(addr, buf, buflen)  ip4addr_ntoa_r((const ip4_addr_t*)&(addr), buf, buflen)
+#define inet_addr(cp)                   new_ipaddr_addr(cp)
+#define inet_aton(cp, addr)             new_ip4addr_aton(cp, (new_ip4_addr_t*)addr)
+#define inet_ntoa(addr)                 new_ip4addr_ntoa((const new_ip4_addr_t*)&(addr))
+#define inet_ntoa_r(addr, buf, buflen)  new_ip4addr_ntoa_r((const new_ip4_addr_t*)&(addr), buf, buflen)
 
 #endif /* LWIP_IPV4 */
 

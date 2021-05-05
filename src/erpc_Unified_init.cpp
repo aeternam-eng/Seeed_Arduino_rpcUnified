@@ -83,8 +83,6 @@ void add_services(erpc::SimpleServer *server)
     server->addService(static_cast<erpc::Service *>(create_rpc_wifi_callback_service()));
 }
 
-extern void loopTask(void *pvParameters);
-
 void runClient(void *arg)
 {
     (void)arg;
@@ -104,13 +102,14 @@ void runServer(void *arg)
         //log_d("Running poll: %d\n", result);
         if(result != kErpcStatus_Success) {
             //vTaskDelete(NULL);
-            log_d("eRPC polling has returned other than success");
+            log_d("eRPC polling has returned other than success %d", result);
             //g_server.poll();
             //esp_restart();
             //break;
         }
-        //taskYIELD();
-        vTaskDelay(10);
+        taskYIELD();
+        //vTaskDelay(100);
+        //delay(20);
     }
 }
 
@@ -128,7 +127,7 @@ void erpc_init()
     digitalWrite(RTL8720D_CHIP_PU, LOW);
     delay(100);
     digitalWrite(RTL8720D_CHIP_PU, HIGH);
-    delay(800);
+    delay(500);
 
     g_transport.init();
     g_arbitrator.setSharedTransport(&g_transport);
