@@ -905,7 +905,7 @@ void system_event_callback_reg(rpc_system_event_cb_t system_event_cb)
 }
 //@}
 
-err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call)
+err_t new_tcpip_api_call(new_tcpip_api_call_fn fn, struct new_tcpip_api_call_data *call)
 {
     RPC_DEBUG("call");
     return fn(call);

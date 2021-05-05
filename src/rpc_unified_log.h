@@ -1,6 +1,8 @@
 #ifndef _RPC_LOG_H
 #define _RPC_LOG_H
 
+#include "Arduino.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -27,10 +29,7 @@ extern "C"
 #ifdef ENABLE_RPC_DEBUG
 #define RPC_DEBUG(...)                                       \
 	{                                                        \
-		rpc_printf("%s: ", TAG);                             \
-		rpc_printf("DEBUG:   %s L#%d ", __func__, __LINE__); \
-		rpc_printf(__VA_ARGS__);                             \
-		rpc_printf("\n");                                    \
+		log_v(__VA_ARGS__);									\
 	}
 #else
 #define RPC_DEBUG(...)
@@ -44,15 +43,15 @@ extern "C"
 #ifdef ENABLE_RPC_TRACE
 #define FUNC_ENTRY                                                  \
 	{                                                               \
-		rpc_printf("FUNC_ENTRY:   %s L#%d \n", __func__, __LINE__); \
+		log_i("FUNC_ENTRY"); \
 	}
 #define FUNC_EXIT                                                  \
 	{                                                              \
-		rpc_printf("FUNC_EXIT:   %s L#%d \n", __func__, __LINE__); \
+		log_i("FUNC_EXIT"); \
 	}
 #define FUNC_EXIT_RC(x)                                                                \
 	{                                                                                  \
-		rpc_printf("FUNC_EXIT:   %s L#%d Return Code : %d \n", __func__, __LINE__, x); \
+		log_i("FUNC_EXIT: Return Code : %d", x); \
 		return x;                                                                      \
 	}
 #else
@@ -73,9 +72,7 @@ extern "C"
 #ifdef ENABLE_RPC_INFO
 #define RPC_INFO(...)              \
 	{                              \
-		rpc_printf("[%s]: ", TAG); \
-		rpc_printf(__VA_ARGS__);   \
-		rpc_printf("\n\r");        \
+		log_i(__VA_ARGS__);	\
 	}
 #else
 #define RPC_INFO(...)
@@ -89,10 +86,7 @@ extern "C"
 #ifdef ENABLE_RPC_WARN
 #define RPC_WARN(...)                                      \
 	{                                                      \
-		rpc_printf("%s: ", TAG);                           \
-		rpc_printf("WARN:  %s L#%d ", __func__, __LINE__); \
-		rpc_printf(__VA_ARGS__);                           \
-		rpc_printf("\n\r");                                \
+		log_w(__VA_ARGS__);	\
 	}
 #else
 #define RPC_WARN(...)
@@ -106,10 +100,7 @@ extern "C"
 #ifdef ENABLE_RPC_ERROR
 #define RPC_ERROR(...)                                     \
 	{                                                      \
-		rpc_printf("%s: ", TAG);                           \
-		rpc_printf("ERROR: %s L#%d ", __func__, __LINE__); \
-		rpc_printf(__VA_ARGS__);                           \
-		rpc_printf("\n\r");                                \
+		log_e(__VA_ARGS__);\
 	}
 #else
 #define RPC_ERROR(...)

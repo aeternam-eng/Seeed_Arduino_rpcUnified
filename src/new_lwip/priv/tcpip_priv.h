@@ -34,8 +34,8 @@
  * Author: Adam Dunkels <adam@sics.se>
  *
  */
-#ifndef LWIP_HDR_TCPIP_PRIV_H
-#define LWIP_HDR_TCPIP_PRIV_H
+#ifndef NEW_LWIP_HDR_TCPIP_PRIV_H
+#define NEW_LWIP_HDR_TCPIP_PRIV_H
 
 #include "new_lwip/opt.h"
 
@@ -94,7 +94,7 @@ extern "C" {
 
 // err_t tcpip_send_msg_wait_sem(tcpip_callback_fn fn, void *apimsg, sys_sem_t* sem);
 
-struct tcpip_api_call_data
+struct new_tcpip_api_call_data
 {
 #if !LWIP_TCPIP_CORE_LOCKING
   err_t err;
@@ -105,8 +105,8 @@ struct tcpip_api_call_data
   u8_t dummy; /* avoid empty struct :-( */
 #endif /* !LWIP_TCPIP_CORE_LOCKING */
 };
-typedef err_t (*tcpip_api_call_fn)(struct tcpip_api_call_data* call);
-err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call);
+typedef err_t (*new_tcpip_api_call_fn)(struct new_tcpip_api_call_data* call);
+err_t new_tcpip_api_call(new_tcpip_api_call_fn fn, struct new_tcpip_api_call_data *call);
 
 // enum tcpip_msg_type {
 //   TCPIP_MSG_API,
@@ -128,8 +128,8 @@ err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call)
 //       void* msg;
 //     } api_msg;
 //     struct {
-//       tcpip_api_call_fn function;
-//       struct tcpip_api_call_data *arg;
+//       new_tcpip_api_call_fn function;
+//       struct new_tcpip_api_call_data *arg;
 //       sys_sem_t *sem;
 //     } api_call;
 //     struct {

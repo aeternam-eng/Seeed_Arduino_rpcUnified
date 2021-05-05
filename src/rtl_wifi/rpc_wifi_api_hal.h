@@ -57,7 +57,7 @@ rpc_esp_err_t new_tcpip_adapter_dhcps_option(rpc_tcpip_adapter_option_mode_t opt
                                      void *opt_val, uint32_t opt_len);
 rpc_esp_err_t new_tcpip_adapter_create_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if);
 rpc_esp_err_t new_tcpip_adapter_get_ip6_linklocal(rpc_tcpip_adapter_if_t tcpip_if, ip6_addr_t *if_ip6);
-err_t new_tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call);
+err_t new_tcpip_api_call(new_tcpip_api_call_fn fn, struct new_tcpip_api_call_data *call);
 err_t new_tcp_connect(struct new_tcp_pcb *pcb, const new_ip_addr_t *ipaddr,u16_t port, tcp_connected_fn connected);
 void new_tcp_recved(struct new_tcp_pcb *pcb, u16_t len);
 void new_tcp_abort(struct new_tcp_pcb *pcb);

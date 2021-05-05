@@ -107,9 +107,9 @@ void runServer(void *arg)
             //esp_restart();
             //break;
         }
-        taskYIELD();
+        //taskYIELD();
         //vTaskDelay(100);
-        //delay(20);
+        delay(20);
     }
 }
 
