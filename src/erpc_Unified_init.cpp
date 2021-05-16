@@ -103,13 +103,14 @@ void runServer(void *arg)
         if(result != kErpcStatus_Success) {
             //vTaskDelete(NULL);
             log_d("eRPC polling has returned other than success %d", result);
+            ESP.restart();
             //g_server.poll();
             //esp_restart();
             //break;
         }
         //taskYIELD();
-        //vTaskDelay(100);
-        delay(20);
+        vTaskDelay(50);
+        //delay(20);
     }
 }
 
@@ -120,14 +121,6 @@ void erpc_init()
 {
     pinMode(16, INPUT_PULLUP);
     pinMode(17, INPUT_PULLUP);
-
-    #define RTL8720D_CHIP_PU 4
-
-    pinMode(RTL8720D_CHIP_PU, OUTPUT);
-    digitalWrite(RTL8720D_CHIP_PU, LOW);
-    delay(100);
-    digitalWrite(RTL8720D_CHIP_PU, HIGH);
-    delay(500);
 
     g_transport.init();
     g_arbitrator.setSharedTransport(&g_transport);
@@ -153,9 +146,4 @@ void erpc_init()
     g_client->setServerThreadId(serverThread.getThreadId());
 
     log_d("g_client initialized");
-}
-
-void init() {
-    Serial.begin(115200);
-    erpc_init();
 }
