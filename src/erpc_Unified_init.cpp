@@ -109,8 +109,8 @@ void runServer(void *arg)
             //break;
         }
         //taskYIELD();
-        vTaskDelay(50);
-        //delay(20);
+        //vTaskDelay(10);
+        delay(30);
     }
 }
 

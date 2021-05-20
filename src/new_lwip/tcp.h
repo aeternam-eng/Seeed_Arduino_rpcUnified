@@ -154,7 +154,7 @@ typedef u8_t tcpflags_t;
 #endif
 #define TCP_ALLFLAGS 0xffffU
 
-enum tcp_state {
+enum tcp_state : uint8_t {
   CLOSED      = 0,
   LISTEN      = 1,
   SYN_SENT    = 2,

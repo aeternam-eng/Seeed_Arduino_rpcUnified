@@ -258,8 +258,6 @@ private:
 #endif
 
 private:
-    static portMUX_TYPE _muxthing;
-
     /*!
      * @brief Copy constructor.
      *
