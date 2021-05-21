@@ -20,7 +20,6 @@ using namespace erpc;
 ////////////////////////////////////////////////////////////////////////////////
 
 Thread *Thread::s_first = NULL;
-static portMUX_TYPE _muxthing = portMUX_INITIALIZER_UNLOCKED;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Code
@@ -53,10 +52,10 @@ void Thread::start(void *arg)
     // created thread to the linked list. This prevents a race condition if the new thread is
     // higher priority than the current thread, and the new thread calls getCurrenThread(),
     // which will scan the linked list.
-    taskENTER_CRITICAL(&(_muxthing));
-    if (pdPASS == xTaskCreate(threadEntryPointStub, (m_name ? m_name : "task"),
+    taskENTER_CRITICAL(&(threadCritical));
+    if (pdPASS == xTaskCreateUniversal(threadEntryPointStub, (m_name ? m_name : "task"),
                               ((m_stackSize + sizeof(uint32_t) - 1) / sizeof(uint32_t)), // Round up number of words.
-                              this, m_priority, &m_task))
+                              this, m_priority, &m_task, APP_CPU_NUM))
     {
         // Link in this thread to the list.
         if (NULL != s_first)
@@ -66,7 +65,7 @@ void Thread::start(void *arg)
         s_first = this;
     }
 
-    taskEXIT_CRITICAL(&(_muxthing));
+    taskEXIT_CRITICAL(&(threadCritical));
 }
 
 bool Thread::operator==(Thread &o)
@@ -79,7 +78,7 @@ Thread *Thread::getCurrentThread()
     TaskHandle_t thisTask = xTaskGetCurrentTaskHandle();
 
     // Walk the threads list to find the Thread object for the current task.
-    taskENTER_CRITICAL(&_muxthing);
+    taskENTER_CRITICAL(&threadCritical);
 
     Thread *it = s_first;
     while (it)
@@ -91,7 +90,7 @@ Thread *Thread::getCurrentThread()
         it = it->m_next;
     }
 
-    taskEXIT_CRITICAL(&_muxthing);
+    taskEXIT_CRITICAL(&threadCritical);
 
     return it;
 }
@@ -118,7 +117,7 @@ void Thread::threadEntryPointStub(void *arg)
     _this->threadEntryPoint();
 
         // Remove this thread from the linked list.
-        taskENTER_CRITICAL(&(_muxthing));
+        taskENTER_CRITICAL(&(threadCritical));
         Thread *it = s_first;
         Thread *prev = NULL;
         while (it)
@@ -140,7 +139,7 @@ void Thread::threadEntryPointStub(void *arg)
             prev = it;
             it = it->m_next;
         }
-        taskEXIT_CRITICAL(&(_muxthing));
+        taskEXIT_CRITICAL(&(threadCritical));
 
     // Handle a task returning from its function. Delete or suspend the task, if the API is
     // available. If neither API is included, then just enter an infinite loop. If vTaskDelay()

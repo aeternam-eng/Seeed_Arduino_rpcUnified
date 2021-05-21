@@ -15,6 +15,6 @@
 #include "esp/esp_err.h"
 #include "esp/esp_hal_log.h"
 
-#define xTaskCreateUniversal(t,n,s,a,p,h,cid) xTaskCreate(t,n,s,a,p,h);
+//#define xTaskCreateUniversal(t,n,s,a,p,h,cid) xTaskCreate(t,n,s,a,p,h);
 
 #endif//_ESP_LIB_UNIFIED_H__
