@@ -18,6 +18,8 @@ extern "C"
 #include "rpc_wifi_callback.h"
 }
 
+#include "Arduino.h"
+
 #if 10704 != ERPC_VERSION_NUMBER
 #error "The generated shim code version is different to the rest of eRPC code."
 #endif
@@ -271,6 +273,7 @@ int32_t rpc_wifi_is_connected_to_ap(void)
         return -1;
     }
 
+    log_d("WiFi is connected Result: %d", result);
     return result;
 }
 

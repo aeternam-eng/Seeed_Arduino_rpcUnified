@@ -11,6 +11,8 @@
 #include <cassert>
 #include "Arduino.h"
 
+#include "newAsyncTCP.h"
+
 #if ERPC_THREADS_IS(FREERTOS)
 
 using namespace erpc;
@@ -52,10 +54,11 @@ void Thread::start(void *arg)
     // created thread to the linked list. This prevents a race condition if the new thread is
     // higher priority than the current thread, and the new thread calls getCurrenThread(),
     // which will scan the linked list.
+    
     taskENTER_CRITICAL(&(threadCritical));
     if (pdPASS == xTaskCreateUniversal(threadEntryPointStub, (m_name ? m_name : "task"),
                               ((m_stackSize + sizeof(uint32_t) - 1) / sizeof(uint32_t)), // Round up number of words.
-                              this, m_priority, &m_task, APP_CPU_NUM))
+                              this, m_priority, &m_task, tskNO_AFFINITY))
     {
         // Link in this thread to the list.
         if (NULL != s_first)

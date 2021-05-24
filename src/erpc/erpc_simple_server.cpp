@@ -202,6 +202,7 @@ erpc_status_t SimpleServer::poll(void)
     {
         if (m_transport->hasMessage())
         {
+            //log_d("ERPC Has Message");
             return runInternal();
         }
         else
@@ -209,6 +210,7 @@ erpc_status_t SimpleServer::poll(void)
             return kErpcStatus_Success;
         }
     }
+    log_n("ERPC SERVER IS DOWN ERROR");
     return kErpcStatus_ServerIsDown;
 }
 

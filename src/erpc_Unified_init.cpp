@@ -22,8 +22,8 @@ class MyMessageBufferFactory : public MessageBufferFactory
 public:
     virtual MessageBuffer create()
     {
-        uint8_t *buf = new uint8_t[4096];
-        return MessageBuffer(buf, 4096);
+        uint8_t *buf = new uint8_t[8192];
+        return MessageBuffer(buf, 8192);
     }
 
     virtual void dispose(MessageBuffer *buf)
@@ -35,36 +35,7 @@ public:
     }
 };
 #define ble_uart Serial2
-/*#define PIN_BLE_SERIAL_X_RX (84ul)
-#define PIN_BLE_SERIAL_X_TX (85ul)
-#define PAD_BLE_SERIAL_X_RX (SERCOM_RX_PAD_2)
-#define PAD_BLE_SERIAL_X_TX (UART_TX_PAD_0)
-#define SERCOM_BLE_SERIAL_X sercom0
-#define INTERRUPT_HANDLER_IMPLEMENT_BLE_SERIAL_X(uart) \
-    void SERCOM0_0_Handler()                           \
-    {                                                  \
-        (uart).IrqHandler();                           \
-    }                                                  \
-    void SERCOM0_1_Handler()                           \
-    {                                                  \
-        (uart).IrqHandler();                           \
-    }                                                  \
-    void SERCOM0_2_Handler()                           \
-    {                                                  \
-        (uart).IrqHandler();                           \
-    }                                                  \
-    void SERCOM0_3_Handler()                           \
-    {                                                  \
-        (uart).IrqHandler();                           \
-    }
 
-EUart ble_uart(&SERCOM_BLE_SERIAL_X, PIN_BLE_SERIAL_X_RX, PIN_BLE_SERIAL_X_TX, PAD_BLE_SERIAL_X_RX, PAD_BLE_SERIAL_X_TX);
-extern "C"
-{
-    INTERRUPT_HANDLER_IMPLEMENT_BLE_SERIAL_X(ble_uart)
-}*/
-
-//HardwareSerial ble_uart = HardwareSerial(2);
 UartTransport g_transport(&ble_uart, 614400);
 MyMessageBufferFactory g_msgFactory;
 BasicCodecFactory g_basicCodecFactory;
@@ -103,18 +74,17 @@ void runServer(void *arg)
         if(result != kErpcStatus_Success) {
             //vTaskDelete(NULL);
             log_d("eRPC polling has returned other than success %d", result);
-            ESP.restart();
             //g_server.poll();
             //esp_restart();
             //break;
         }
         //taskYIELD();
-        //vTaskDelay(20);
-        delay(20);
+        //vTaskDelay(1);
+        //delay(1);
     }
 }
 
-Thread serverThread(&runServer, configMAX_PRIORITIES, 32768, "runServer");
+Thread serverThread(&runServer, 1, 32767, "runServer");
 //Thread clientThread(&runClient, configMAX_PRIORITIES - 2, 64575, "runClient");
 
 void erpc_init()

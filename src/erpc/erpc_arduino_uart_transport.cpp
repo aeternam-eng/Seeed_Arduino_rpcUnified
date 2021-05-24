@@ -277,15 +277,19 @@ erpc_status_t UartTransport::init(void)
 erpc_status_t UartTransport::underlyingReceive(uint8_t *data, uint32_t size)
 {
   uint32_t bytesRead = 0;
+  //log_d("Inside underlyingReceive");
   while (bytesRead < size)
   {
-    while (!m_uartDrv->available()) delay(1);
+    //while (!m_uartDrv->available()) {delay(1);}
 
     const int c = m_uartDrv->read();
+    //delay(1);
     if (c < 0) continue;
     data[bytesRead++] = static_cast<uint8_t>(c);
   }
+  //bytesRead = m_uartDrv->read(data, size);
 
+  //log_d("Exiting underlyingReceive");
   return kErpcStatus_Success; // return size != bytesRead ? kErpcStatus_ReceiveFailed : kErpcStatus_Success;
 }
 
@@ -296,7 +300,8 @@ erpc_status_t UartTransport::underlyingSend(const uint8_t *data, uint32_t size)
   {
     const uint32_t sendSize = min(size - sentSize, (uint32_t)256);
     sentSize += m_uartDrv->write(&data[sentSize], sendSize);
-    vTaskDelay(150);
+    //m_uartDrv->flush();
+    //delay(10);
   }
   return kErpcStatus_Success; // return size != offset ? kErpcStatus_SendFailed : kErpcStatus_Success;
 }

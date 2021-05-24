@@ -13,6 +13,13 @@
 #include <cassert>
 #include <cstdio>
 
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <sstream>
+#include <iomanip>
+
 using namespace erpc;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +61,8 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
             return ret;
         }
 
+        //log_d("ERPC Header - CRC: %d | SIZE: %d", h.m_crc, h.m_messageSize);
+
         // received size can't be larger then buffer length.
         if (h.m_messageSize > message->getLength())
         {
@@ -63,6 +72,17 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
 
         // Receive rest of the message now we know its size.
         ret = underlyingReceive(message->get(), h.m_messageSize);
+        
+        if(ret == kErpcStatus_Success) {
+            String a;
+            for(int i = 0; i < h.m_messageSize; i++) {
+                a += message->get()[i];
+                a += " ";
+            }
+
+            //log_d("ERPC Message: %s", a.c_str());
+        }
+
         if (ret != kErpcStatus_Success)
         {
             return ret;
@@ -73,6 +93,7 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
     uint16_t computedCrc = m_crcImpl->computeCRC16(message->get(), h.m_messageSize);
     if (computedCrc != h.m_crc)
     {
+        log_d("CRC Check FAILED - exp: %d | rcv: %d", computedCrc, h.m_crc);
         return kErpcStatus_CrcCheckFailed;
     }
 
