@@ -3,7 +3,7 @@
     The MIT License (MIT)
     Copyright (C) 2020  Seeed Technology Co.,Ltd.
 */
-
+#include <Arduino.h>
 #include "erpc/erpc_arduino_uart_transport.h"
 #include "erpc/erpc_basic_codec.h"
 #include "erpc/erpc_arbitrated_client_manager.h"
@@ -22,8 +22,8 @@ class MyMessageBufferFactory : public MessageBufferFactory
 public:
     virtual MessageBuffer create()
     {
-        uint8_t *buf = new uint8_t[8192];
-        return MessageBuffer(buf, 8192);
+        uint8_t *buf = new uint8_t[4096];
+        return MessageBuffer(buf, 4096);
     }
 
     virtual void dispose(MessageBuffer *buf)
@@ -50,17 +50,8 @@ Crc16 g_crc16;
  */
 void add_services(erpc::SimpleServer *server)
 {
-    server->addService(static_cast<erpc::Service *>(create_rpc_ble_callback_service()));
+    //server->addService(static_cast<erpc::Service *>(create_rpc_ble_callback_service()));
     server->addService(static_cast<erpc::Service *>(create_rpc_wifi_callback_service()));
-}
-
-void runClient(void *arg)
-{
-    (void)arg;
-    delay(100);
-
-    log_d("clientThread running");
-    //loopTask(NULL);
 }
 
 void runServer(void *arg)
@@ -70,22 +61,14 @@ void runServer(void *arg)
     log_d("serverThread running");
     for(;;) {
         uint8_t result = g_server.poll();
-        //log_d("Running poll: %d\n", result);
         if(result != kErpcStatus_Success) {
-            //vTaskDelete(NULL);
-            log_d("eRPC polling has returned other than success %d", result);
-            //g_server.poll();
-            //esp_restart();
-            //break;
+            log_e("eRPC polling has returned other than success %d", result);
         }
-        //taskYIELD();
-        //vTaskDelay(1);
-        //delay(1);
+        vTaskDelay(10);
     }
 }
 
 Thread serverThread(&runServer, 1, 32767, "runServer");
-//Thread clientThread(&runClient, configMAX_PRIORITIES - 2, 64575, "runClient");
 
 void erpc_init()
 {
@@ -110,7 +93,6 @@ void erpc_init()
     add_services(&g_server);
 
     serverThread.start();
-    //clientThread.start();
 
     g_client->setServer(&g_server);
     g_client->setServerThreadId(serverThread.getThreadId());

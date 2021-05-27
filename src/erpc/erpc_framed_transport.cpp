@@ -61,7 +61,7 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
             return ret;
         }
 
-        //log_d("ERPC Header - CRC: %d | SIZE: %d", h.m_crc, h.m_messageSize);
+        //log_i("ERPC Header - CRC: %d | SIZE: %d", h.m_crc, h.m_messageSize);
 
         // received size can't be larger then buffer length.
         if (h.m_messageSize > message->getLength())
@@ -73,15 +73,23 @@ erpc_status_t FramedTransport::receive(MessageBuffer *message)
         // Receive rest of the message now we know its size.
         ret = underlyingReceive(message->get(), h.m_messageSize);
         
-        if(ret == kErpcStatus_Success) {
+        /*if(ret == kErpcStatus_Success) {
             String a;
             for(int i = 0; i < h.m_messageSize; i++) {
-                a += message->get()[i];
+                String b = String(message->get()[i], HEX);
+                b.toUpperCase();
+                String c = "0";
+                if(b.length() == 1) {
+                    c.concat(b);
+                    a += c;
+                } else {
+                    a += b;
+                }
                 a += " ";
             }
 
-            //log_d("ERPC Message: %s", a.c_str());
-        }
+            log_d("ERPC Message: %s", a.c_str());
+        }*/
 
         if (ret != kErpcStatus_Success)
         {

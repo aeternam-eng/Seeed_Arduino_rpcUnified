@@ -58,7 +58,7 @@ void Thread::start(void *arg)
     taskENTER_CRITICAL(&(threadCritical));
     if (pdPASS == xTaskCreateUniversal(threadEntryPointStub, (m_name ? m_name : "task"),
                               ((m_stackSize + sizeof(uint32_t) - 1) / sizeof(uint32_t)), // Round up number of words.
-                              this, m_priority, &m_task, tskNO_AFFINITY))
+                              this, m_priority, &m_task, PRO_CPU_NUM))
     {
         // Link in this thread to the list.
         if (NULL != s_first)

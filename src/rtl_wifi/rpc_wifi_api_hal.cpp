@@ -965,7 +965,8 @@ void new_tcp_recved(struct new_tcp_pcb *pcb, u16_t len)
     pcb_in_b.dataLength = sizeof(rpc_tcp_pcb);
 
     ret = rpc_tcp_recved(&pcb_in_b,&pcb_out_b,len);
-
+    log_d("pbuf thing");
+    
     if(pcb_out_b.data){
         copy_rtp_to_tp((rpc_tcp_pcb *)pcb_out_b.data,pcb);
         erpc_free(pcb_out_b.data);
